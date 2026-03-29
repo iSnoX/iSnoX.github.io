@@ -557,16 +557,16 @@ input, select, textarea {
     font-size: 4.35em !important;
     font-weight: 900 !important;
     letter-spacing: -0.035em !important;
-    line-height: 1.1em !important;
+    line-height: 1.2em !important;
     margin: 0 auto 0.5em auto !important;
     
-    /* Der Rahmen-Fix */
-    border: 3px solid black !important; 
+    /* Der Rahmen um SnoX */
     display: inline-block !important; 
+    border: 3px solid black !important; 
     padding: 10px 30px !important;
     border-radius: 10px !important;
     
-    /* Sicherstellen, dass kein Hintergrund stört */
+    /* Hintergrund-Fix */
     background: transparent !important;
 }
 
