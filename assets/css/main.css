@@ -553,15 +553,18 @@ input, select, textarea {
 		width: 90%;
 	}
 
-		#header h1 {
-			font-size: 4.35em;
-			font-weight: 900;
-			letter-spacing: -0.035em;
-			line-height: 1em;
-			border: 2px solid black;       /* 2 Pixel breite, durchgehende, weiße Linie */
-    		display: inline-block;          /* Sorgt dafür, dass der Rahmen nur so breit wie der Text ist */
-  			padding: 10px 20px;            /* 10px Platz oben/unten, 20px links/rechts zum Text */
-   			border-radius: 5px;            /* (Optional) Leicht abgerundete Ecken */
+#header h1 {
+    font-size: 4.35em;
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    line-height: 1.1em; /* Leicht erhöht für besseres Padding */
+    margin: 0 !important; /* Entfernt alle Standard-Außenabstände */
+    
+    /* Der Rahmen - eng umschlossen */
+    border: 2px solid black; 
+    display: inline-block !important; /* Der entscheidende Befehl: Macht den Kasten nur so breit wie den Text */
+    padding: 10px 25px !important; /* Innenabstand: 10px oben/unten, 25px links/rechts */
+    border-radius: 8px; /* Leicht abgerundete Ecken */
 }
 
 		#header p {
