@@ -558,7 +558,11 @@ input, select, textarea {
 			font-weight: 900;
 			letter-spacing: -0.035em;
 			line-height: 1em;
-		}
+			border: 2px solid black;       /* 2 Pixel breite, durchgehende, weiße Linie */
+    		display: inline-block;          /* Sorgt dafür, dass der Rahmen nur so breit wie der Text ist */
+  			padding: 10px 20px;            /* 10px Platz oben/unten, 20px links/rechts zum Text */
+   			border-radius: 5px;            /* (Optional) Leicht abgerundete Ecken */
+}
 
 		#header p {
 			font-size: 1.25em;
