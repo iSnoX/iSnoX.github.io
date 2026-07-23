@@ -363,16 +363,19 @@
             document.getElementById('smoke-count').innerText = smokeCount;
         }
 
-        // YouTube URL für den Embed-Modus vorbereiten (autoplay + saubere Ansicht)
+        // YouTube URL für den Embed-Modus vorbereiten (autoplay + loop + keine Steuerung)
         function getEmbedUrl(url) {
             let baseUrl = url;
             if (baseUrl.includes('youtu.be/')) {
                 const id = baseUrl.split('youtu.be/')[1].split('?')[0];
                 baseUrl = `https://www.youtube.com/embed/${id}`;
             }
+            
+            const videoIdMatch = baseUrl.match(/embed\/([a-zA-Z0-9_-]+)/);
+            const videoId = videoIdMatch ? videoIdMatch[1] : '';
+
             const separator = baseUrl.includes('?') ? '&' : '?';
-            // autoplay=1 sorgt dafür, dass es direkt startet; rel=0 blendet keine fremden Videos ein
-            return `${baseUrl}${separator}autoplay=1&rel=0&modestbranding=1`;
+            return `${baseUrl}${separator}autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1`;
         }
 
         function openModal(nade) {
