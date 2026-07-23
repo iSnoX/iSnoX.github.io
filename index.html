@@ -5,160 +5,141 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-        /* Grunddesign */
         body {
-            background-color: #0e1217;
+            background-color: #121418;
             color: #ffffff;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px 20px 20px 100px; /* Platz für Menü links */
-        }
-
-        /* Schwebendes Menü links */
-        #side-menu {
-            position: fixed;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1000;
-        }
-
-        #side-menu ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        #side-menu li {
-            margin: 15px 0;
-        }
-
-        #side-menu a {
+            padding: 40px 20px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
-            background: #1c232d;
-            border: 2px solid #2a3544;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-            position: relative;
         }
 
-        #side-menu a:hover {
-            background: #ff4655; /* Valorant/CS Accent Red */
-            border-color: #ff4655;
-            transform: scale(1.1);
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            color: #ffb400; /* CS Yellow / Gold */
         }
 
-        /* Nade Grid Layout */
-        .nade-grid {
+        /* Map Grid Container */
+        .map-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 20px;
-            margin-top: 20px;
+            max-width: 1200px;
+            width: 100%;
         }
 
-        .nade-card {
-            background: #1c232d;
-            border: 1px solid #2a3544;
+        /* Einzelne Map Card */
+        .map-card {
+            position: relative;
+            height: 220px;
             border-radius: 12px;
             overflow: hidden;
-            position: relative;
-        }
-
-        .nade-card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            background-color: #2a3544;
-        }
-
-        .nade-info {
-            padding: 15px;
-        }
-
-        .nade-info h3 {
-            margin: 0 0 10px 0;
-        }
-
-        .nade-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-        }
-
-        .smoke { background: #5a6578; color: #fff; }
-        .flash { background: #f59e0b; color: #000; }
-
-        .btn-clip {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 12px;
-            background: #ff4655;
-            color: #fff;
             text-decoration: none;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            border: 2px solid #2a2e37;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            background-size: cover;
+            background-position: center;
         }
 
-        .btn-clip:hover {
-            background: #e03e4d;
+        .map-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffb400;
         }
+
+        /* Dunkler Verlauf über dem Bild für Lesbarkeit */
+        .map-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.2) 70%);
+            z-index: 1;
+        }
+
+        .map-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .map-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .map-count {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        /* Beispiel Hintergründe (Pfade zu deinen Bildern anpassen) */
+        .map-mirage { background-image: url('assets/images/mirage-bg.jpg'); }
+        .map-dust2  { background-image: url('assets/images/dust2-bg.jpg'); }
+        .map-cache  { background-image: url('assets/images/cache-bg.jpg'); }
+        .map-inferno { background-image: url('assets/images/inferno-bg.jpg'); }
+        .map-inferno { background-image: url('assets/images/ancient-bg.jpg'); }
+        .map-inferno { background-image: url('assets/images/anubis-bg.jpg'); }
+        .map-inferno { background-image: url('assets/images/overpass-bg.jpg'); }
     </style>
 </head>
 <body>
 
-    <!-- Schwebendes Menü links -->
-    <nav id="side-menu">
-        <ul>
-            <li><a href="#mirage">Mirage</a></li>
-            <li><a href="#inferno">Inferno</a></li>
-            <li><a href="#dust2">Dust II</a></li>
-            <li><a href="#anubis">Anubis</a></li>
-            <li><a href="#ancient">Ancient</a></li>
-        </ul>
-    </nav>
+    <h1>CS2NADES</h1>
 
-    <!-- Hauptinhalt -->
-    <main>
-        <h1>CS2 Nades & Lineups</h1>
+    <div class="map-grid">
+        <a href="mirage.html" class="map-card map-mirage">
+            <div class="map-content">
+                <div class="map-title">Mirage</div>
+            </div>
+        </a>
 
-        <div class="nade-grid">
-            <!-- NADE CARD 1 -->
-            <article class="nade-card">
-                <span class="nade-badge smoke">Smoke</span>
-                <img src="https://via.placeholder.com/300x160?text=Mirage+Window+Smoke" alt="Mirage Window Smoke">
-                <div class="nade-info">
-                    <h3>Mirage - Window Smoke</h3>
-                    <p><strong>Pos:</strong> T-Spawn<br><strong>Tick:</strong> Jumpthrow</p>
-                    <a href="https://youtube.com" target="_blank" class="btn-clip">Video / Clip</a>
-                </div>
-            </article>
+        <a href="dust2.html" class="map-card map-dust2">
+            <div class="map-content">
+                <div class="map-title">Dust 2</div>
+            </div>
+        </a>
 
-            <!-- NADE CARD 2 -->
-            <article class="nade-card">
-                <span class="nade-badge flash">Flash</span>
-                <img src="https://via.placeholder.com/300x160?text=Inferno+Banana+Flash" alt="Inferno Banana Flash">
-                <div class="nade-info">
-                    <h3>Inferno - Banana Popflash</h3>
-                    <p><strong>Pos:</strong> Car<br><strong>Tick:</strong> Normal</p>
-                    <a href="https://youtube.com" target="_blank" class="btn-clip">Video / Clip</a>
-                </div>
-            </article>
-        </div>
-    </main>
+        <a href="cache.html" class="map-card map-cache">
+            <div class="map-content">
+                <div class="map-title">Cache</div>
+            </div>
+        </a>
+
+        <a href="inferno.html" class="map-card map-inferno">
+            <div class="map-content">
+                <div class="map-title">Inferno</div>
+            </div>
+        </a>
+        
+        <a href="inferno.html" class="map-card map-ancient">
+            <div class="map-content">
+                <div class="map-title">Ancient</div>
+            </div>
+        </a>
+        
+        <a href="inferno.html" class="map-card map-anubis">
+            <div class="map-content">
+                <div class="map-title">Anubis</div>
+            </div>
+        </a>
+        
+        <a href="inferno.html" class="map-card map-overpass">
+            <div class="map-content">
+                <div class="map-title">Overpass</div>
+            </div>
+        </a>
+    </div>
 
 </body>
 </html>
