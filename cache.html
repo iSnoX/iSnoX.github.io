@@ -119,11 +119,13 @@
             height: 800px;
             max-width: 90vh;
             max-height: 90vh;
+            background-color: #1a1a1e;
             background-image: url('radar.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             border-radius: 12px;
+            border: 1px solid #29292e;
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
         }
 
@@ -184,7 +186,7 @@
             z-index: 8;
         }
 
-        /* Video Modal */
+        /* Video / Media Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -268,7 +270,7 @@
 
         .video-container {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
             height: 0;
             background: #000;
             border-radius: 6px;
@@ -331,9 +333,7 @@
                 <h3 id="modal-title" style="color:#fff;">Nade Lineup</h3>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
-            <div class="modal-body" id="modal-content">
-                <!-- Dynamischer Inhalt für Video oder Bild wird hier injiziert -->
-            </div>
+            <div class="modal-body" id="modal-content"></div>
         </div>
     </div>
 
@@ -346,10 +346,8 @@
         const radarBox = document.getElementById('radar-box');
         const resetBtn = document.getElementById('reset-btn');
 
-        // Dynamisches Laden der cache.json von GitHub
         async function loadNadesFromJSON() {
             try {
-                // Timestamp ?v=... verhindert Browser-Caching von alten Versionen
                 const response = await fetch(`cache.json?v=${Date.now()}`);
                 if (response.ok) {
                     nadesData = await response.json();
@@ -402,7 +400,6 @@
                 }
             });
 
-            // Aktualisiere Badges basierend auf der aktuellen Seite (T/CT)
             document.getElementById('smoke-count').innerText = nadesData.filter(n => n.type === 'smoke' && n.throws && n.throws.some(t => t.side === currentSide)).length;
             document.getElementById('molotov-count').innerText = nadesData.filter(n => n.type === 'molotov' && n.throws && n.throws.some(t => t.side === currentSide)).length;
             document.getElementById('flash-count').innerText = nadesData.filter(n => n.type === 'flash' && n.throws && n.throws.some(t => t.side === currentSide)).length;
@@ -431,7 +428,6 @@
             renderTargetPins();
         }
 
-        // Unterstützt sowohl Videos (videoUrl) als auch Screenshots (imageUrl)
         function openMediaModal(nade, throwObj) {
             document.getElementById('modal-title').innerText = `${nade.title} (Von ${throwObj.from})`;
             const contentContainer = document.getElementById('modal-content');
@@ -488,7 +484,6 @@
             if (e.target.id === 'modal-overlay') closeModal();
         };
 
-        // Beim ersten Aufruf direkt JSON laden
         document.addEventListener("DOMContentLoaded", loadNadesFromJSON);
     </script>
 </body>
