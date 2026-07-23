@@ -334,17 +334,24 @@
 
     <!-- Linke Seitenleiste -->
     <aside class="sidebar">
+        <!-- Logo ganz oben in der Sidebar -->
+        <div class="sidebar-logo-container">
+            <a href="index.html">
+                <img src="assets/images/sx.png" alt="CS2 Nades Logo" class="site-logo">
+            </a>
+        </div>
+
         <div>
             <a href="index.html" class="back-link">← Zurück zur Übersicht</a>
             <div class="map-header">
-                <h1 id="map-name-heading">Ancient</h1>
+                <h1>Ancient</h1>
             </div>
         </div>
 
         <!-- T / CT Umschalter -->
         <div class="side-filter-container">
-            <button class="side-btn t-side active" id="btn-side-t" onclick="setSideFilter('T')">T Seite</button>
-            <button class="side-btn ct-side" id="btn-side-ct" onclick="setSideFilter('CT')">CT Seite</button>
+            <button class="side-btn t-side active" id="btn-side-t" onclick="setSideFilter('T')">T site</button>
+            <button class="side-btn ct-side" id="btn-side-ct" onclick="setSideFilter('CT')">CT site</button>
         </div>
 
         <!-- Filter-Boxen -->
