@@ -119,13 +119,11 @@
             height: 800px;
             max-width: 90vh;
             max-height: 90vh;
-            background-color: #1a1a1e;
             background-image: url('radar.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             border-radius: 12px;
-            border: 1px solid #29292e;
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
         }
 
@@ -346,18 +344,17 @@
         const radarBox = document.getElementById('radar-box');
         const resetBtn = document.getElementById('reset-btn');
 
+        // Versucht dynamisch cache.json zu laden; falls lokal / nicht vorhanden, bricht es nicht ab
         async function loadNadesFromJSON() {
             try {
                 const response = await fetch(`cache.json?v=${Date.now()}`);
                 if (response.ok) {
                     nadesData = await response.json();
-                    renderTargetPins();
-                } else {
-                    console.error("Konnte cache.json nicht laden:", response.status);
                 }
             } catch (err) {
-                console.error("Fehler beim Abrufen der JSON:", err);
+                console.warn("JSON konnte nicht geladen werden, verwende Standard-Daten:", err);
             }
+            renderTargetPins();
         }
 
         function setSideFilter(side) {
