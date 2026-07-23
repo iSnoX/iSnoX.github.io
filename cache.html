@@ -429,7 +429,8 @@
     </div>
 
     <script>
-        const nadesData = [
+        // 1. Statische Standard-Nades
+        const defaultNadesData = [
             {
                 id: "target-1784803370819",
                 title: "Cache Smoke: Back A Site",
@@ -446,6 +447,23 @@
                 ]
             }
         ];
+
+        // 2. Eingereichte Nades aus dem localStorage laden
+        function getSubmittedNades() {
+            try {
+                const stored = localStorage.getItem('submittedNades');
+                if (!stored) return [];
+                const parsed = JSON.parse(stored);
+                // Nur Nades für die Map "cache" filtern (oder Einträge ohne Map-Angabe für Abwärtskompatibilität)
+                return parsed.filter(nade => !nade.map || nade.map.toLowerCase() === 'cache');
+            } catch (e) {
+                console.error("Fehler beim Laden aus localStorage:", e);
+                return [];
+            }
+        }
+
+        // Kombiniere Standard-Nades mit den eingereichten Nades aus dem Submit-Menü
+        const nadesData = [...defaultNadesData, ...getSubmittedNades()];
 
         let currentSide = "T";
         let currentType = "smoke";
