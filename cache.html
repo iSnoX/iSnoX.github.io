@@ -18,6 +18,26 @@
             height: 100vh;
             overflow: hidden;
         }
+        /* Logo oben mittig */
+        .site-logo-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+        }
+
+        .site-logo {
+            height: 45px;
+            width: auto;
+            display: block;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+        }
+        .site-logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 4px 12px rgba(255,180,0,0.4));
+        }
 
         /* Linke Seitenleiste */
         .sidebar {
@@ -306,6 +326,18 @@
     </style>
 </head>
 <body>
+    <body>
+
+    <!-- HIER EINFÜGEN: Logo oben mittig -->
+    <div class="site-logo-container">
+        <a href="index.html">
+            <img src="assets/images/sx.png" alt="CS2 Nades Logo" class="site-logo">
+        </a>
+    </div>
+
+    <!-- Linke Seitenleiste -->
+    <aside class="sidebar">
+...
 
     <!-- Linke Seitenleiste -->
     <aside class="sidebar">
