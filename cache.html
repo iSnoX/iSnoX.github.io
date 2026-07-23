@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+    <title>Cache - CS2 Nades</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body {
+            background-color: #121418;
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+            display: flex;
+        }
+
+        /* Linke Sidebar für Filter */
+        .sidebar {
+            width: 250px;
+            background: #1a1d24;
+            padding: 20px;
+            min-height: 100vh;
+            border-right: 1px solid #2a2e37;
+        }
+
+        .filter-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #2a2e37;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .filter-btn:hover {
+            background: #ffb400;
+            color: black;
+        }
+
+        /* Rechter Bereich: Radar Map */
+        .map-container {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Das Radar-Bild als Container */
+        .radar-box {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .radar-img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* Pins / Interaktive Punkte auf der Map */
+        .nade-pin {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #ffb400;
+            color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            border: 2px solid white;
+            transition: transform 0.2s;
+        }
+
+        .nade-pin:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+        }
+
+        /* Platzierung der Pins (in % von der Karte) */
+        .pin-1 { top: 35%; left: 42%; } /* Beispiel Pos A-Site */
+        .pin-2 { top: 68%; left: 52%; } /* Beispiel Pos B-Site */
+    </style>
+</head>
+<body>
+
+    <!-- Filter Links -->
+    <div class="sidebar">
+        <a href="index.html" style="color:#aaa; text-decoration:none;">← Zurück zur Übersicht</a>
+        <h2 style="margin-top:20px;">Cache</h2>
+        <button class="filter-btn">💨 Smokes (26)</button>
+        <button class="filter-btn">🔥 Molotovs (8)</button>
+        <button class="filter-btn">⚡ Flashbangs (1)</button>
+    </div>
+
+    <!-- Map & Interactive Pins -->
+    <div class="map-container">
+        <div class="radar-box">
+            <!-- 2D Radar Map Bild -->
+            <img src="assets/images/cache-radar.png" alt="Cache Radar" class="radar-img">
+
+            <!-- Pins / Punkte auf der Karte -->
+            <div class="nade-pin pin-1" title="A Main Smoke">2</div>
+            <div class="nade-pin pin-2" title="B Garage Smoke">3</div>
+        </div>
+    </div>
+
+</body>
+</html>
