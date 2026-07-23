@@ -1,352 +1,268 @@
 <!DOCTYPE HTML>
 <html lang="de">
 <head>
-    <title>Nade einsenden - CS2 Nades</title>
+    <title>Submit Nade - CS2 Nades</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         * { box-sizing: border-box; }
-
         body {
             background-color: #0e1013;
             color: white;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
+            gap: 20px;
         }
-
-        .submit-container {
-            width: 100%;
-            max-width: 800px;
+        .form-container {
+            width: 400px;
             background: #171a21;
-            border: 1px solid #222731;
+            padding: 20px;
             border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .header {
+            border: 1px solid #222731;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #222731;
-            padding-bottom: 15px;
+            flex-direction: column;
+            gap: 12px;
         }
-
-        .back-link {
-            color: #8f9cae;
-            text-decoration: none;
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        label { font-size: 0.85rem; color: #8f9cae; font-weight: bold; }
+        input, select, textarea {
+            background: #121418;
+            border: 1px solid #2a303d;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
             font-size: 0.9rem;
         }
-
-        .step { display: none; }
-        .step.active { display: block; }
-
-        .form-group { margin-bottom: 20px; }
-
-        label {
-            display: block;
-            font-size: 0.85rem;
-            color: #8f9cae;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 12px;
-            background: #1e222d;
-            border: 1px solid #2a303d;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        select:focus, input:focus { border-color: #ffb400; }
-
-        .btn {
-            background: #ffb400;
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-        .btn:hover { background: #e09e00; }
-
-        .btn-secondary { background: #2a303d; color: #fff; }
-        .btn-secondary:hover { background: #363d4d; }
-
-        .map-picker-wrapper {
+        .map-preview-container {
+            flex: 1;
+            background: #121418;
+            border: 1px solid #222731;
+            border-radius: 16px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
         }
-
-        .instruction-badge {
-            background: #1e222d;
-            border: 1px solid #2a303d;
-            padding: 10px 18px;
-            border-radius: 20px;
-            color: #ffb400;
-            font-weight: bold;
-            font-size: 0.95rem;
-        }
-
         .radar-box {
             position: relative;
             display: inline-block;
             cursor: crosshair;
         }
-
         .radar-img {
-            max-height: 50vh;
+            height: 70vh;
             width: auto;
             border-radius: 12px;
-            display: block;
         }
-
         .pin {
             position: absolute;
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
+            transform: translate(-50%, -50%);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 12px;
             font-weight: bold;
-            font-size: 11px;
-            transform: translate(-50%, -50%);
-            border: 2px solid white;
+            border: 2px solid #fff;
         }
-        .pin-target { background: #ff4757; color: white; }
-        .pin-throw { background: #2ed573; color: black; }
-
-        .output-box {
-            background: #121418;
-            border: 1px dashed #ffb400;
+        .target-pin-preview { background: #ffb400; color: #000; }
+        .throw-pin-preview { background: #3b82f6; color: #fff; }
+        .submit-btn {
+            background: #ffb400;
+            color: #000;
+            border: none;
+            padding: 12px;
             border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            font-family: monospace;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
         }
+        .submit-btn:hover { background: #e09e00; }
+        .mode-btn-container { display: flex; gap: 8px; }
+        .mode-btn {
+            flex: 1; padding: 8px; background: #2a303d; color: #fff;
+            border: none; border-radius: 6px; cursor: pointer;
+        }
+        .mode-btn.active { background: #ffb400; color: #000; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="submit-container">
-    <div class="header">
-        <h2 style="margin:0;">➕ Neue Wurfvariante eintragen</h2>
-        <a href="index.html" class="back-link">← Zurück</a>
-    </div>
+    <div class="form-container">
+        <h2>+ Neue Nade hinzufügen</h2>
 
-    <!-- Schritt 1: Infos -->
-    <div id="step-1" class="step active">
         <div class="form-group">
-            <label for="map-select">1. Karte auswählen</label>
-            <select id="map-select">
-                <option value="cache" data-img="assets/images/cache-radar.webp">Cache</option>
-                <option value="mirage" data-img="assets/images/mirage-radar.webp">Mirage</option>
-                <option value="dust2" data-img="assets/images/dust2-radar.webp">Dust 2</option>
-                <option value="inferno" data-img="assets/images/inferno-radar.webp">Inferno</option>
-                <option value="ancient" data-img="assets/images/ancient-radar.webp">Ancient</option>
-                <option value="anubis" data-img="assets/images/anubis-radar.webp">Anubis</option>
-                <option value="overpass" data-img="assets/images/overpass-radar.webp">Overpass</option>
+            <label>Map auswählen</label>
+            <select id="map-select" onchange="changeMapRadar()">
+                <option value="cache.json" data-img="assets/images/cache-radar.webp">Cache</option>
+                <option value="mirage.json" data-img="assets/images/mirage-radar.webp">Mirage</option>
+                <option value="dust2.json" data-img="assets/images/dust2-radar.webp">Dust 2</option>
+                <option value="inferno.json" data-img="assets/images/inferno-radar.webp">Inferno</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="side-select">2. Seite (T oder CT)</label>
-            <select id="side-select">
-                <option value="T">Terrorists (T-Seite)</option>
-                <option value="CT">Counter-Terrorists (CT-Seite)</option>
+            <label>Titel der Nade</label>
+            <input type="text" id="title" placeholder="z. B. Cache Smoke: Back A Site">
+        </div>
+
+        <div class="form-group">
+            <label>Typ</label>
+            <select id="type">
+                <option value="smoke">💨 Smoke</option>
+                <option value="molotov">🔥 Molotov</option>
+                <option value="flash">⚡ Flashbang</option>
+                <option value="he">💣 HE Grenade</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="title-input">3. Name der Smoke (Zielort)</label>
-            <input type="text" id="title-input" placeholder="z. B. A Main Smoke">
-        </div>
-
-        <div class="form-group">
-            <label for="from-input">4. Abwurfort (Von wo wird geworfen?)</label>
-            <input type="text" id="from-input" placeholder="z. B. T-Spawn, Mülltonne...">
-        </div>
-
-        <button class="btn" onclick="goToStep2()">Weiter zu Schritt 2: Punkte setzen →</button>
-    </div>
-
-    <!-- Schritt 2: Radar Klicks -->
-    <div id="step-2" class="step">
-        <div class="map-picker-wrapper">
-            <div id="instruction" class="instruction-badge">
-                🎯 Klicke auf das Radar, wo die Granate LANDET (Zielort)
-            </div>
-
-            <div class="radar-box" id="radar-box">
-                <img id="submit-radar-img" src="" alt="Radar Map" class="radar-img">
-            </div>
-
-            <div id="step-2-buttons" style="display:none; width:100%;">
-                <button class="btn" onclick="goToStep3()">Weiter zu Schritt 3: Wurftechnik & YouTube →</button>
-            </div>
-
-            <div style="display:flex; gap:10px; width:100%;">
-                <button class="btn btn-secondary" onclick="resetPicker()">🔄 Zurücksetzen</button>
-                <button class="btn btn-secondary" onclick="switchStep('step-1')">← Zurück</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Schritt 3: Video & Technik -->
-    <div id="step-3" class="step">
-        <div class="form-group">
-            <label for="throw-type">1. Wurftechnik</label>
-            <select id="throw-type">
-                <option value="Left Click (Normal)">🖱️ Linksklick (Normal Throw)</option>
-                <option value="Jump Throw">🦘 Jump Throw</option>
-                <option value="W + Jump Throw">🏃‍♂️ W + Jump Throw</option>
-                <option value="Right Click (Underhand)">🖱️ Rechtsklick (Underhand)</option>
-                <option value="Left + Right Click">🖱️ Links + Rechtsklick</option>
+            <label>Seite</label>
+            <select id="side">
+                <option value="T">T Site</option>
+                <option value="CT">CT Site</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="youtube-input">2. YouTube Link</label>
-            <input type="url" id="youtube-input" placeholder="https://www.youtube.com/watch?v=...">
+            <label>Wurf-Position (Von wo?)</label>
+            <input type="text" id="from" placeholder="z. B. Outside Garage">
         </div>
 
-        <button class="btn" style="background:#2ed573;" onclick="generateOutput()">🚀 Code generieren</button>
-        <button class="btn btn-secondary" onclick="switchStep('step-2')">← Zurück</button>
+        <div class="form-group">
+            <label>Wurf-Technik</label>
+            <input type="text" id="technique" placeholder="z. B. Jump Throw, Standing">
+        </div>
 
-        <div id="result-box" class="output-box" style="display:none;">
-            <strong style="color:#2ed573;">Füge diesen Abschnitt in deinen `nadesData`-Block ein:</strong>
-            <pre id="code-output" style="color: #ffb400; margin-top:10px; white-space: pre-wrap;"></pre>
+        <div class="form-group">
+            <label>Klick-Modus auf dem Radar</label>
+            <div class="mode-btn-container">
+                <button type="button" class="mode-btn active" id="btn-target" onclick="setClickMode('target')">1. Zielort setzen</button>
+                <button type="button" class="mode-btn" id="btn-throw" onclick="setClickMode('throw')">2. Abwurf ort setzen</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Screenshot / Video hochladen</label>
+            <input type="file" id="screenshot-file" accept="image/*">
+        </div>
+
+        <button type="button" class="submit-btn" onclick="handleSubmit()">🚀 Auf GitHub veröffentlichen</button>
+        <button type="button" style="background:transparent; border:none; color:#8f9cae; cursor:pointer; text-decoration:underline;" onclick="resetGitHubToken()">Token zurücksetzen</button>
+    </div>
+
+    <div class="map-preview-container">
+        <h3>Klicke auf die Karte für Zielort & Abwurfort</h3>
+        <div class="radar-box" id="radar-box" onclick="handleRadarClick(event)">
+            <img src="assets/images/cache-radar.webp" id="radar-img" class="radar-img">
         </div>
     </div>
-</div>
-
-<script>
-    let targetPos = null;
-    let throwPos = null;
-
-    function switchStep(stepId) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById(stepId).classList.add('active');
-    }
-
-    function goToStep2() {
-        const selectedOption = document.getElementById('map-select').selectedOptions[0];
-        document.getElementById('submit-radar-img').src = selectedOption.getAttribute('data-img');
-        switchStep('step-2');
-        if (!targetPos || !throwPos) resetPicker();
-    }
-
-    function goToStep3() {
-        switchStep('step-3');
-    }
-
-    const radarBox = document.getElementById('radar-box');
-    const instruction = document.getElementById('instruction');
-
-    radarBox.addEventListener('click', function(e) {
-        if (e.target.classList.contains('pin')) return;
-
-        const rect = radarBox.getBoundingClientRect();
-        const leftPercent = Math.round(((e.clientX - rect.left) / rect.width) * 100);
-        const topPercent = Math.round(((e.clientY - rect.top) / rect.height) * 100);
-
-        if (!targetPos) {
-            targetPos = { top: topPercent, left: leftPercent };
-            createPin(topPercent, leftPercent, 'pin-target', '🎯');
-            instruction.innerText = '🏃 Jetzt auf die Karte klicken, VON WO geworfen wird';
-            instruction.style.color = '#2ed573';
-        } else if (!throwPos) {
-            throwPos = { top: topPercent, left: leftPercent };
-            createPin(topPercent, leftPercent, 'pin-throw', '🏃');
-            instruction.innerText = '✅ Punkte gesetzt!';
-            instruction.style.color = '#fff';
-            document.getElementById('step-2-buttons').style.display = 'block';
-        }
-    });
-
-    function createPin(top, left, className, icon) {
-        const pin = document.createElement('div');
-        pin.className = `pin ${className}`;
-        pin.style.top = top + '%';
-        pin.style.left = left + '%';
-        pin.innerText = icon;
-        radarBox.appendChild(pin);
-    }
-
-    function resetPicker() {
-        targetPos = null;
-        throwPos = null;
-        document.querySelectorAll('.pin').forEach(p => p.remove());
-        document.getElementById('step-2-buttons').style.display = 'none';
-        instruction.innerText = '🎯 Klicke auf das Radar, wo die Granate LANDET';
-        instruction.style.color = '#ffb400';
-    }
-
-    function convertYoutubeUrl(url) {
-        let videoId = "";
-        if (url.includes("v=")) {
-            videoId = url.split("v=")[1].split("&")[0];
-        } else if (url.includes("youtu.be/")) {
-            videoId = url.split("youtu.be/")[1].split("?")[0];
-        }
-        return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
-    }
-
-    function generateOutput() {
-        const side = document.getElementById('side-select').value;
-        const title = document.getElementById('title-input').value || 'Neue Smoke';
-        const from = document.getElementById('from-input').value || 'Unbekannt';
-        const technique = document.getElementById('throw-type').value;
-        const rawUrl = document.getElementById('youtube-input').value;
-        const embedUrl = convertYoutubeUrl(rawUrl);
-
-        const throwData = {
-            side: side,
-            from: from,
-            technique: technique,
-            videoUrl: embedUrl,
-            throwPosition: { top: throwPos.top, left: throwPos.left }
-        };
-
-        const fullNadeStructure = {
-            id: "target-" + Date.now(),
-            title: title,
-            type: "smoke",
-            targetPosition: { top: targetPos.top, left: targetPos.left },
-            throws: [ throwData ]
-        };
-
-        document.getElementById('code-output').innerText = 
-            "// 1. Wenn es den ZIELORT noch nicht gibt, füge das hinzu:\n" +
-            JSON.stringify(fullNadeStructure, null, 2) + "\n\n" +
-            "// 2. Wenn es den Zielort SCHON GIBT, füge nur diesen Wurf zu 'throws' hinzu:\n" +
-            JSON.stringify(throwData, null, 2);
-
-        document.getElementById('result-box').style.display = 'block';
-    }
-</script>
 
     <script src="submit.js"></script>
-</body>
-</html>
+    <script>
+        let clickMode = 'target';
+        let targetPos = null;
+        let throwPos = null;
 
+        function setClickMode(mode) {
+            clickMode = mode;
+            document.getElementById('btn-target').classList.toggle('active', mode === 'target');
+            document.getElementById('btn-throw').classList.toggle('active', mode === 'throw');
+        }
+
+        function changeMapRadar() {
+            const select = document.getElementById('map-select');
+            const selectedOption = select.options[select.selectedIndex];
+            document.getElementById('radar-img').src = selectedOption.getAttribute('data-img');
+            targetPos = null;
+            throwPos = null;
+            renderPreviewPins();
+        }
+
+        function handleRadarClick(e) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const left = Math.round(((e.clientX - rect.left) / rect.width) * 1000) / 10;
+            const top = Math.round(((e.clientY - rect.top) / rect.height) * 1000) / 10;
+
+            if (clickMode === 'target') {
+                targetPos = { top, left };
+                setClickMode('throw'); // Automatisch zum Abwurfort wechseln
+            } else {
+                throwPos = { top, left };
+            }
+            renderPreviewPins();
+        }
+
+        function renderPreviewPins() {
+            document.querySelectorAll('.pin').forEach(p => p.remove());
+            const box = document.getElementById('radar-box');
+
+            if (targetPos) {
+                const pin = document.createElement('div');
+                pin.className = 'pin target-pin-preview';
+                pin.style.top = targetPos.top + '%';
+                pin.style.left = targetPos.left + '%';
+                pin.innerText = '🎯';
+                box.appendChild(pin);
+            }
+
+            if (throwPos) {
+                const pin = document.createElement('div');
+                pin.className = 'pin throw-pin-preview';
+                pin.style.top = throwPos.top + '%';
+                pin.style.left = throwPos.left + '%';
+                pin.innerText = '🏃';
+                box.appendChild(pin);
+            }
+        }
+
+        async function handleSubmit() {
+            const mapJson = document.getElementById('map-select').value;
+            const title = document.getElementById('title').value;
+            const type = document.getElementById('type').value;
+            const side = document.getElementById('side').value;
+            const from = document.getElementById('from').value;
+            const technique = document.getElementById('technique').value;
+            const fileInput = document.getElementById('screenshot-file');
+
+            if (!title || !from || !targetPos || !throwPos || fileInput.files.length === 0) {
+                return alert("Bitte fülle alle Felder aus, wähle Ziel- & Abwurfort auf dem Radar und füge ein Bild an!");
+            }
+
+            try {
+                // 1. Screenshot auf GitHub hochladen
+                const file = fileInput.files[0];
+                const uploadedImagePath = await uploadImageToGitHub(file);
+
+                // 2. Nade-Objekt bauen
+                const newNade = {
+                    id: "target-" + Date.now(),
+                    title: title,
+                    type: type,
+                    targetPosition: targetPos,
+                    throws: [{
+                        side: side,
+                        from: from,
+                        technique: technique,
+                        imageUrl: uploadedImagePath,
+                        throwPosition: throwPos
+                    }]
+                };
+
+                // 3. Auf GitHub in der JSON-Datei speichern
+                await saveNadeToGitHub(mapJson, newNade);
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    </script>
 </body>
 </html>
