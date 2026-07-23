@@ -310,23 +310,44 @@
 
     <!-- Linke Seitenleiste -->
     <aside class="sidebar">
+        <!-- Logo ganz oben in der Sidebar -->
+        <div class="sidebar-logo-container">
+            <a href="index.html">
+                <img src="assets/images/sx.png" alt="CS2 Nades Logo" class="site-logo">
+            </a>
+        </div>
+
         <div>
             <a href="index.html" class="back-link">← Zurück zur Übersicht</a>
             <div class="map-header">
-                <h1 id="map-name-heading">Inferno</h1>
+                <h1>Inferno</h1>
             </div>
         </div>
 
-        <!-- Filter-Boxen (T / CT Nades) -->
+        <!-- T / CT Umschalter -->
+        <div class="side-filter-container">
+            <button class="side-btn t-side active" id="btn-side-t" onclick="setSideFilter('T')">T site</button>
+            <button class="side-btn ct-side" id="btn-side-ct" onclick="setSideFilter('CT')">CT site</button>
+        </div>
+
+        <!-- Filter-Boxen -->
         <div class="filter-box">
-            <div class="filter-title">Seiten</div>
-            <button class="filter-btn active" id="btn-t" onclick="setSide('T')">
-                <span>🟡 T Nades</span>
-                <span class="badge" id="t-count">0</span>
+            <div class="filter-title">Nades</div>
+            <button class="filter-btn active" onclick="setNadeTypeFilter('smoke', this)">
+                <span>💨 Smokes</span>
+                <span class="badge" id="smoke-count">0</span>
             </button>
-            <button class="filter-btn" id="btn-ct" onclick="setSide('CT')">
-                <span>🔵 CT Nades</span>
-                <span class="badge" id="ct-count">0</span>
+            <button class="filter-btn" onclick="setNadeTypeFilter('molotov', this)">
+                <span>🔥 Molotovs</span>
+                <span class="badge" id="molotov-count">0</span>
+            </button>
+            <button class="filter-btn" onclick="setNadeTypeFilter('flash', this)">
+                <span>⚡ Flashbangs</span>
+                <span class="badge" id="flash-count">0</span>
+            </button>
+            <button class="filter-btn" onclick="setNadeTypeFilter('he', this)">
+                <span>💣 HE Grenades</span>
+                <span class="badge" id="he-count">0</span>
             </button>
         </div>
 
