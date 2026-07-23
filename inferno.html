@@ -1,7 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="de">
 <head>
-    <!-- HIER ANPASSEN: Map-Name im Titel -->
     <title>Inferno - CS2 Nades</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -314,8 +313,7 @@
         <div>
             <a href="index.html" class="back-link">← Zurück zur Übersicht</a>
             <div class="map-header">
-                <!-- HIER ANPASSEN: Name der Map in der Anzeige -->
-                <h1 id="map-name-heading">Mirage</h1>
+                <h1 id="map-name-heading">Inferno</h1>
             </div>
         </div>
 
@@ -357,7 +355,6 @@
     <!-- Radar-Bereich (Hauptfenster) -->
     <main class="map-container">
         <div class="radar-box" id="radar-box">
-            <!-- HIER ANPASSEN: Pfad zum Radar-Bild der jeweiligen Map (z.B. assets/images/mirage-radar.webp) -->
             <img src="assets/images/inferno-radar.webp" alt="Map Radar" class="radar-img" id="radar-img">
         </div>
         <div class="radar-controls">
@@ -377,19 +374,19 @@
     </div>
 
     <script>
-        // HIER TRÄGST DU SPÄTER DIE DATEN FÜR DIE MAP EIN
+        // DATEN FÜR INFERNO
         const nadesData = [
-            /* Beispiel-Eintrag:
+            /* Beispiel-Eintrag für Inferno:
             {
                 id: "target-1",
-                title: "Mirage Smoke: Stairs",
+                title: "Inferno Smoke: Coffin",
                 type: "smoke", // Optionen: 'smoke', 'molotov', 'flash', 'he'
                 targetPosition: { top: 40.0, left: 50.0 },
                 throws: [
                     {
-                        from: "T Spawn",
+                        from: "T Roof",
                         technique: "Jump Throw",
-                        videoUrl: "assets/videos/mirage-stairs-smoke.mp4",
+                        videoUrl: "assets/videos/inferno-coffin-smoke.mp4",
                         throwPosition: { top: 80.0, left: 30.0 }
                     }
                 ]
