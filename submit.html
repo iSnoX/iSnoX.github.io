@@ -38,15 +38,15 @@
             padding-bottom: 15px;
         }
 
-        .back-btn {
+        .back-link {
             color: #8f9cae;
             text-decoration: none;
             font-size: 0.9rem;
             transition: color 0.2s;
         }
-        .back-btn:hover { color: #fff; }
+        .back-link:hover { color: #fff; }
 
-        /* Formular-Elemente */
+        /* Formular-Elemente & Schritte */
         .step { display: none; }
         .step.active { display: block; }
 
@@ -88,9 +88,17 @@
             font-size: 1rem;
             cursor: pointer;
             transition: transform 0.1s, background 0.2s;
+            width: 100%;
+            margin-top: 10px;
         }
         .btn:hover { background: #e09e00; }
         .btn:active { transform: scale(0.98); }
+
+        .btn-secondary {
+            background: #2a303d;
+            color: #fff;
+        }
+        .btn-secondary:hover { background: #363d4d; }
 
         /* Step 2 Layout: Map & Anweisungen */
         .map-picker-wrapper {
@@ -140,8 +148,8 @@
             border: 2px solid white;
             box-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
-        .pin-target { background: #ff4757; color: white; } /* Ziel (Landeort) */
-        .pin-throw { background: #2ed573; color: black; }  /* Abwurfposition */
+        .pin-target { background: #ff4757; color: white; }
+        .pin-throw { background: #2ed573; color: black; }
 
         .output-box {
             background: #121418;
@@ -165,6 +173,7 @@
 
     <!-- SCHRITT 1: Auswahl der Map & Nade Type -->
     <div id="step-1" class="step active">
+        <h3 style="margin-top:0; color:#ffb400;">Schritt 1: Grundinfos</h3>
         <div class="form-group">
             <label for="map-select">1. Karte auswählen</label>
             <select id="map-select">
@@ -189,8 +198,8 @@
         </div>
 
         <div class="form-group">
-            <label for="title-input">3. Bezeichnung / Titel (z. B. "A Main Smoke from T-Spawn")</label>
-            <input type="text" id="title-input" placeholder="Kurzer, prägnanter Name...">
+            <label for="title-input">3. Bezeichnung / Titel</label>
+            <input type="text" id="title-input" placeholder="z. B. A Main Smoke from T-Spawn">
         </div>
 
         <button class="btn" onclick="goToStep2()">Weiter zu Schritt 2: Positionen wählen →</button>
@@ -198,6 +207,7 @@
 
     <!-- SCHRITT 2: Interaktive Kartenauswahl -->
     <div id="step-2" class="step">
+        <h3 style="margin-top:0; color:#ffb400; text-align:center;">Schritt 2: Positionen auf Radar markieren</h3>
         <div class="map-picker-wrapper">
             <div id="instruction" class="instruction-badge">
                 🎯 Klicke auf das Radar, wo die Granate LANDET (Zielort)
@@ -207,39 +217,72 @@
                 <img id="submit-radar-img" src="" alt="Radar Map" class="radar-img">
             </div>
 
-            <div id="result-box" class="output-box" style="display:none;">
-                <strong>📍 Generierter Code für dein HTML:</strong>
-                <pre id="code-output" style="color: #ffb400; margin: 10px 0 0 0; white-space: pre-wrap;"></pre>
+            <div id="step-2-buttons" style="display:none; width:100%;">
+                <button class="btn" onclick="goToStep3()">Weiter zu Schritt 3: Wurftechnik & Video →</button>
             </div>
 
-            <div style="display:flex; gap:10px; width:100%; margin-top:15px;">
-                <button class="btn" style="background:#2a303d; color:#fff;" onclick="resetPicker()">🔄 Positionen zurücksetzen</button>
-                <button class="btn" style="flex:1;" onclick="goToStep1()">← Schritt 1 bearbeiten</button>
+            <div style="display:flex; gap:10px; width:100%; margin-top:5px;">
+                <button class="btn btn-secondary" onclick="resetPicker()">🔄 Positionen zurücksetzen</button>
+                <button class="btn btn-secondary" onclick="goToStep1()">← Zurück zu Schritt 1</button>
             </div>
+        </div>
+    </div>
+
+    <!-- SCHRITT 3: Wurftechnik & Video-Link -->
+    <div id="step-3" class="step">
+        <h3 style="margin-top:0; color:#ffb400;">Schritt 3: Wurftechnik & Video</h3>
+        
+        <div class="form-group">
+            <label for="throw-type">1. Wurftechnik (Wie wird geworfen?)</label>
+            <select id="throw-type">
+                <option value="Left Click (Normal)">🖱️ Linksklick (Normal Throw)</option>
+                <option value="Jump Throw">🦘 Jump Throw (Bind/Skript)</option>
+                <option value="W + Jump Throw">🏃‍♂️ W + Jump Throw (Forward Jump)</option>
+                <option value="Right Click (Underhand)">🖱️ Rechtsklick (Underhand / Drop)</option>
+                <option value="Left + Right Click (Middle)">🖱️ Links + Rechtsklick (Medium Throw)</option>
+                <option value="Running Left Click">🏃‍♂️ Laufender Linksklick (Run Throw)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="video-input">2. Video-Link (YouTube, Medal.tv, Streamable)</label>
+            <input type="url" id="video-input" placeholder="https://medal.tv/games/cs2/clip/...">
+            <small style="color:#8f9cae; font-size:0.8rem;">💡 Da statische Seiten keine großen 50MB MP4-Dateien hosten können, füge hier einfach den Link zum Clip ein!</small>
+        </div>
+
+        <button class="btn" style="background:#2ed573;" onclick="generateFinalOutput()">🚀 Granate generieren / abspeichern</button>
+        <button class="btn btn-secondary" onclick="goToStep2()">← Zurück zu den Radar-Pins</button>
+
+        <div id="result-box" class="output-box" style="display:none;">
+            <strong style="color:#2ed573;">✅ Fertiger JSON-Datenblock für dein System:</strong>
+            <pre id="code-output" style="color: #ffb400; margin: 10px 0 0 0; white-space: pre-wrap;"></pre>
+            <button class="btn" style="margin-top:10px; padding:8px;" onclick="copyOutput()">📋 Code kopieren</button>
         </div>
     </div>
 </div>
 
 <script>
-    let currentStep = 1;
-    let targetPos = null; // Wohin die Nade fliegt
-    let throwPos = null;  // Von wo geworfen wird
+    let targetPos = null;
+    let throwPos = null;
+
+    function goToStep1() {
+        switchStep('step-1');
+    }
 
     function goToStep2() {
         const selectedOption = document.getElementById('map-select').selectedOptions[0];
-        const mapImgSrc = selectedOption.getAttribute('data-img');
-        
-        // Radarbild dynamisch auf das aus Schritt 1 gewählte setzen
-        document.getElementById('submit-radar-img').src = mapImgSrc;
-
-        document.getElementById('step-1').classList.remove('active');
-        document.getElementById('step-2').classList.add('active');
-        resetPicker();
+        document.getElementById('submit-radar-img').src = selectedOption.getAttribute('data-img');
+        switchStep('step-2');
+        if (!targetPos || !throwPos) resetPicker();
     }
 
-    function goToStep1() {
-        document.getElementById('step-2').classList.remove('active');
-        document.getElementById('step-1').classList.add('active');
+    function goToStep3() {
+        switchStep('step-3');
+    }
+
+    function switchStep(stepId) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById(stepId).classList.add('active');
     }
 
     const radarBox = document.getElementById('radar-box');
@@ -252,20 +295,18 @@
         const leftPercent = (((e.clientX - rect.left) / rect.width) * 100).toFixed(1);
         const topPercent = (((e.clientY - rect.top) / rect.height) * 100).toFixed(1);
 
-        // 1. Klick: Zielort (Landeort)
         if (!targetPos) {
             targetPos = { top: topPercent, left: leftPercent };
             createPin(topPercent, leftPercent, '🎯 Landung', 'pin-target');
             instruction.innerText = '🏃 Jetzt auf die Karte klicken, VON WO geworfen wird (Abwurfposition)';
             instruction.style.color = '#2ed573';
         } 
-        // 2. Klick: Abwurfposition
         else if (!throwPos) {
             throwPos = { top: topPercent, left: leftPercent };
             createPin(topPercent, leftPercent, '🏃 Abwurf', 'pin-throw');
             instruction.innerText = '✅ Beide Punkte gesetzt!';
             instruction.style.color = '#fff';
-            generateFinalOutput();
+            document.getElementById('step-2-buttons').style.display = 'block';
         }
     });
 
@@ -283,7 +324,7 @@
         targetPos = null;
         throwPos = null;
         document.querySelectorAll('.pin').forEach(p => p.remove());
-        document.getElementById('result-box').style.display = 'none';
+        document.getElementById('step-2-buttons').style.display = 'none';
         instruction.innerText = '🎯 Klicke auf das Radar, wo die Granate LANDET (Zielort)';
         instruction.style.color = '#ffb400';
     }
@@ -292,16 +333,31 @@
         const map = document.getElementById('map-select').value;
         const type = document.getElementById('nade-select').value;
         const title = document.getElementById('title-input').value || 'Unbenannte Nade';
+        const throwType = document.getElementById('throw-type').value;
+        const videoUrl = document.getElementById('video-input').value || 'Kein Link angegeben';
 
-        const outputCode = `<!-- ${title} (${type.toUpperCase()}) -->\n` +
-            `<div class="nade-pin target" style="top: ${targetPos.top}%; left: ${targetPos.left}%;" title="${title}">🎯</div>\n` +
-            `<div class="nade-pin throw" style="top: ${throwPos.top}%; left: ${throwPos.left}%;" title="Abwurf für ${title}">🏃</div>`;
+        // Erstellt ein sauberes Daten-Objekt (JSON), das später für Datenbanken oder dynamisches Laden perfekt ist
+        const nadeData = {
+            id: Date.now(),
+            map: map,
+            type: type,
+            title: title,
+            technique: throwType,
+            video: videoUrl,
+            targetPosition: { top: `${targetPos.top}%`, left: `${targetPos.left}%` },
+            throwPosition: { top: `${throwPos.top}%`, left: `${throwPos.left}%` }
+        };
 
-        document.getElementById('code-output').innerText = outputCode;
+        document.getElementById('code-output').innerText = JSON.stringify(nadeData, null, 2);
         document.getElementById('result-box').style.display = 'block';
+    }
+
+    function copyOutput() {
+        const text = document.getElementById('code-output').innerText;
+        navigator.clipboard.writeText(text);
+        alert('Code wurde in die Zwischenablage kopiert!');
     }
 </script>
 
 </body>
 </html>
-
