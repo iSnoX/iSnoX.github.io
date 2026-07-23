@@ -6,377 +6,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         * { box-sizing: border-box; }
-
         body {
-            background-color: #0e1013;
-            color: white;
+            background-color: #0e1013; color: white;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            gap: 20px;
-            height: 100vh;
-            overflow: hidden;
+            margin: 0; padding: 20px; display: flex; gap: 20px; height: 100vh; overflow: hidden;
         }
-
-        /* Linke Seitenleiste */
         .sidebar {
-            width: 300px;
-            min-width: 300px;
-            background: #171a21;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            overflow-y: auto;
-            border: 1px solid #222731;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            width: 300px; min-width: 300px; background: #171a21; padding: 20px;
+            display: flex; flex-direction: column; gap: 15px; overflow-y: auto;
+            border: 1px solid #222731; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
-
-        .back-link {
-            color: #8f9cae;
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: color 0.2s;
+        .sidebar-logo-container { text-align: center; padding-bottom: 10px; border-bottom: 1px solid #2a303d; }
+        .site-logo {
+            height: 40px; width: auto; display: inline-block;
+            transition: transform 0.2s ease, filter 0.2s ease; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
         }
+        .site-logo:hover { transform: scale(1.05); filter: drop-shadow(0 4px 12px rgba(255,180,0,0.4)); }
+        .back-link { color: #8f9cae; text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
         .back-link:hover { color: #fff; }
-
-        .map-header h1 {
-            margin: 5px 0 0 0;
-            font-size: 1.8rem;
-        }
-
-        /* T / CT Umschalter */
-        .side-filter-container {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 5px;
-        }
-
+        .map-header h1 { margin: 5px 0 0 0; font-size: 1.8rem; }
+        .side-filter-container { display: flex; gap: 8px; margin-bottom: 5px; }
         .side-btn {
-            flex: 1;
-            padding: 8px;
-            background: #121418;
-            color: #8f9cae;
-            border: 1px solid #2a303d;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
+            flex: 1; padding: 8px; background: #121418; color: #8f9cae;
+            border: 1px solid #2a303d; border-radius: 8px; font-weight: bold; font-size: 0.85rem;
+            cursor: pointer; transition: all 0.2s; text-align: center;
         }
         .side-btn:hover { background: #282e3d; color: #fff; }
         .side-btn.active.t-side { background: #d97706; color: #000; border-color: #f59e0b; }
         .side-btn.active.ct-side { background: #2563eb; color: #fff; border-color: #3b82f6; }
-
-        .filter-box {
-            background: #1e222d;
-            border-radius: 12px;
-            padding: 8px;
-            border: 1px solid #2a303d;
-        }
-
-        .filter-title {
-            font-size: 0.75rem;
-            color: #8f9cae;
-            text-transform: uppercase;
-            font-weight: bold;
-            padding: 8px 12px;
-        }
-
+        .filter-box { background: #1e222d; border-radius: 12px; padding: 8px; border: 1px solid #2a303d; }
+        .filter-title { font-size: 0.75rem; color: #8f9cae; text-transform: uppercase; font-weight: bold; padding: 8px 12px; }
         .filter-btn {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            padding: 10px 14px;
-            margin-bottom: 4px;
-            background: transparent;
-            color: #c3cddb;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            text-align: left;
+            display: flex; justify-content: space-between; align-items: center; width: 100%;
+            padding: 10px 14px; margin-bottom: 4px; background: transparent; color: #c3cddb;
+            border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+            transition: all 0.2s; text-align: left;
         }
         .filter-btn:hover { background: #282e3d; color: #fff; }
         .filter-btn.active { background: #2e3547; color: #fff; }
-
-        .badge {
-            background: #121418;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            color: #8f9cae;
-        }
-
+        .badge { background: #121418; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; color: #8f9cae; }
         .submit-btn {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 12px 14px;
-            background: #ffb400;
-            color: #000;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
+            display: flex; justify-content: center; align-items: center; width: 100%;
+            padding: 12px 14px; background: #ffb400; color: #000; border-radius: 8px;
+            text-decoration: none; font-weight: bold; font-size: 0.95rem; transition: all 0.2s ease;
         }
         .submit-btn:hover { background: #e09e00; transform: translateY(-1px); }
-
-        /* Rechter Radar-Bereich */
         .map-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: #121418;
-            border: 1px solid #222731;
-            border-radius: 16px;
-            padding: 20px;
-            height: calc(100vh - 40px);
-            position: relative;
+            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: #121418; border: 1px solid #222731; border-radius: 16px; padding: 20px;
+            height: calc(100vh - 40px); position: relative;
         }
-
-        .radar-box {
-            position: relative;
-            display: inline-block;
-        }
-
-        .radar-img {
-            height: 70vh;
-            width: auto;
-            max-width: 100%;
-            display: block;
-            border-radius: 12px;
-            filter: drop-shadow(0 0 20px rgba(0,0,0,0.6));
-        }
-
-        /* Target Pins auf dem Radar */
+        .radar-box { position: relative; display: inline-block; }
+        .radar-img { height: 70vh; width: auto; max-width: 100%; display: block; border-radius: 12px; filter: drop-shadow(0 0 20px rgba(0,0,0,0.6)); }
         .target-pin {
-            position: absolute;
-            width: 32px;
-            height: 32px;
-            background: #ffb400;
-            color: black;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            transform: translate(-50%, -50%);
-            border: 2px solid white;
-            box-shadow: 0 0 12px rgba(0,0,0,0.6);
-            transition: transform 0.2s ease;
-            z-index: 5;
+            position: absolute; width: 32px; height: 32px; background: #ffb400; color: black;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 14px; cursor: pointer; transform: translate(-50%, -50%);
+            border: 2px solid white; box-shadow: 0 0 12px rgba(0,0,0,0.6); transition: transform 0.2s ease; z-index: 5;
         }
-        .target-pin:hover {
-            transform: translate(-50%, -50%) scale(1.25);
-            z-index: 10;
-        }
-
-        /* Abwurf-Pin direkt auf dem Haupt-Radar */
+        .target-pin:hover { transform: translate(-50%, -50%) scale(1.25); z-index: 10; }
         .throw-pin {
-            position: absolute;
-            width: 36px;
-            height: 36px;
-            background: #3b82f6;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transform: translate(-50%, -50%);
-            border: 2px solid white;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.9);
-            transition: transform 0.2s ease;
-            z-index: 5;
+            position: absolute; width: 36px; height: 36px; background: #3b82f6; color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 16px; cursor: pointer; transform: translate(-50%, -50%);
+            border: 2px solid white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.9); transition: transform 0.2s ease; z-index: 5;
         }
-        .throw-pin:hover {
-            transform: translate(-50%, -50%) scale(1.3);
-            z-index: 10;
-        }
-
-        .radar-controls {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
-
+        .throw-pin:hover { transform: translate(-50%, -50%) scale(1.3); z-index: 10; }
+        .radar-controls { margin-top: 15px; display: flex; gap: 10px; }
         .reset-view-btn {
-            background: #2a303d;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            display: none;
-            transition: background 0.2s;
+            background: #2a303d; color: #fff; border: none; padding: 8px 16px;
+            border-radius: 8px; font-weight: bold; cursor: pointer; display: none; transition: background 0.2s;
         }
         .reset-view-btn:hover { background: #3b4252; }
-
-        /* Pop-up Modal nur für das Video */
         .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.9); z-index: 100; justify-content: center; align-items: center; padding: 10px;
         }
         .modal-overlay.active { display: flex; }
-
         .modal-card {
-            background: #171a21;
-            border: 1px solid #2a303d;
-            border-radius: 16px;
-            width: 90vw;
-            height: 90vh;
-            max-width: 1400px;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 30px;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.95);
-            position: relative;
+            background: #171a21; border: 1px solid #2a303d; border-radius: 16px; width: 90vw; height: 90vh;
+            max-width: 1400px; display: flex; flex-direction: column; padding: 20px 30px; box-shadow: 0 10px 50px rgba(0,0,0,0.95); position: relative;
         }
-
-        .modal-header-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
+        .modal-header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .modal-close {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: #8f9cae;
-            font-size: 1.8rem;
-            line-height: 1;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.1); border: none; color: #8f9cae; font-size: 1.8rem; line-height: 1;
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
         }
         .modal-close:hover { color: #fff; background: rgba(255, 255, 255, 0.2); }
-
-        .modal-body {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .throw-option {
-            background: #1e222d;
-            border: 1px solid #2a303d;
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .throw-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .technique-badge {
-            background: #ffb400;
-            color: #000;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.95rem;
-        }
-
-        .video-container {
-            position: relative;
-            width: 100%;
-            height: 60vh;
-            background: #000;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #000;
-        }
+        .modal-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .throw-option { background: #1e222d; border: 1px solid #2a303d; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; height: 100%; }
+        .throw-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .technique-badge { background: #ffb400; color: #000; padding: 6px 14px; border-radius: 6px; font-weight: bold; font-size: 0.95rem; }
+        .video-container { position: relative; width: 100%; height: 60vh; background: #000; border-radius: 10px; overflow: hidden; }
+        .video-container video { width: 100%; height: 100%; object-fit: contain; background: #000; }
     </style>
 </head>
 <body>
-
-    <!-- Linke Seitenleiste -->
     <aside class="sidebar">
-        <!-- Logo ganz oben in der Sidebar -->
         <div class="sidebar-logo-container">
-            <a href="index.html">
-                <img src="assets/images/sx.png" alt="CS2 Nades Logo" class="site-logo">
-            </a>
+            <a href="index.html"><img src="assets/images/sx.png" alt="CS2 Nades Logo" class="site-logo"></a>
         </div>
-
         <div>
             <a href="index.html" class="back-link">← Zurück zur Übersicht</a>
-            <div class="map-header">
-                <h1>Anubis</h1>
-            </div>
+            <div class="map-header"><h1>Anubis</h1></div>
         </div>
-
-        <!-- T / CT Umschalter -->
         <div class="side-filter-container">
             <button class="side-btn t-side active" id="btn-side-t" onclick="setSideFilter('T')">T site</button>
             <button class="side-btn ct-side" id="btn-side-ct" onclick="setSideFilter('CT')">CT site</button>
         </div>
-
-        <!-- Filter-Boxen -->
         <div class="filter-box">
             <div class="filter-title">Nades</div>
-            <button class="filter-btn active" onclick="setNadeTypeFilter('smoke', this)">
-                <span>💨 Smokes</span>
-                <span class="badge" id="smoke-count">0</span>
-            </button>
-            <button class="filter-btn" onclick="setNadeTypeFilter('molotov', this)">
-                <span>🔥 Molotovs</span>
-                <span class="badge" id="molotov-count">0</span>
-            </button>
-            <button class="filter-btn" onclick="setNadeTypeFilter('flash', this)">
-                <span>⚡ Flashbangs</span>
-                <span class="badge" id="flash-count">0</span>
-            </button>
-            <button class="filter-btn" onclick="setNadeTypeFilter('he', this)">
-                <span>💣 HE Grenades</span>
-                <span class="badge" id="he-count">0</span>
-            </button>
+            <button class="filter-btn active" onclick="setNadeTypeFilter('smoke', this)"><span>💨 Smokes</span><span class="badge" id="smoke-count">0</span></button>
+            <button class="filter-btn" onclick="setNadeTypeFilter('molotov', this)"><span>🔥 Molotovs</span><span class="badge" id="molotov-count">0</span></button>
+            <button class="filter-btn" onclick="setNadeTypeFilter('flash', this)"><span>⚡ Flashbangs</span><span class="badge" id="flash-count">0</span></button>
+            <button class="filter-btn" onclick="setNadeTypeFilter('he', this)"><span>💣 HE Grenades</span><span class="badge" id="he-count">0</span></button>
         </div>
-
         <a href="submit.html" class="submit-btn">+ Submit Nade</a>
-
         <div class="filter-box">
             <div class="filter-title">Maps</div>
             <a href="cache.html" class="filter-btn" style="text-decoration:none;">Cache</a>
@@ -384,22 +129,17 @@
             <a href="dust2.html" class="filter-btn" style="text-decoration:none;">Dust 2</a>
             <a href="inferno.html" class="filter-btn" style="text-decoration:none;">Inferno</a>
             <a href="ancient.html" class="filter-btn" style="text-decoration:none;">Ancient</a>
-            <a href="anubis.html" class="filter-btn" style="text-decoration:none;">Anubis</a>
             <a href="overpass.html" class="filter-btn" style="text-decoration:none;">Overpass</a>
         </div>
     </aside>
-
-    <!-- Radar-Bereich (Hauptfenster) -->
     <main class="map-container">
         <div class="radar-box" id="radar-box">
-            <img src="assets/images/anubis-radar.webp" alt="Map Radar" class="radar-img" id="radar-img">
+            <img src="assets/images/anubis-radar.webp" alt="Anubis Radar" class="radar-img" id="radar-img">
         </div>
         <div class="radar-controls">
             <button class="reset-view-btn" id="reset-btn" onclick="resetRadarView()">← Zurück zu allen Zielorten</button>
         </div>
     </main>
-
-    <!-- Modal Fenster nur für Video -->
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal-card">
             <div class="modal-header-area">
@@ -409,16 +149,30 @@
             <div class="modal-body" id="modal-content"></div>
         </div>
     </div>
-
     <script>
-        const nadesData = [];
-
+        // DATEN FÜR Nades (mit Eigenschaft side: "T" oder "CT")
+        const nadesData = [
+            /* Beispiel-Eintrag für Nades:
+            {
+                id: "target-1",
+                title: "Dust 2 Smoke: Long A Crossing",
+                side: "T", // "T" oder "CT"
+                targetPosition: { top: 40.0, left: 50.0 },
+                throws: [
+                    {
+                        from: "T Spawn",
+                        technique: "Standard",
+                        videoUrl: "assets/videos/map-location-nadetype.mp4",
+                        throwPosition: { top: 80.0, left: 30.0 }
+                    }
+                ]
+            }
+            */
+        ];
         let currentSide = "T";
         let currentType = "smoke";
-
         const radarBox = document.getElementById('radar-box');
         const resetBtn = document.getElementById('reset-btn');
-
         function setSideFilter(side) {
             currentSide = side;
             if(side === 'T') {
@@ -430,21 +184,17 @@
             }
             renderTargetPins();
         }
-
         function setNadeTypeFilter(type, btnElement) {
             currentType = type;
             document.querySelectorAll('.filter-box .filter-btn').forEach(b => b.classList.remove('active'));
             btnElement.classList.add('active');
             renderTargetPins();
         }
-
         function renderTargetPins() {
             document.querySelectorAll('.target-pin, .throw-pin').forEach(p => p.remove());
             resetBtn.style.display = 'none';
-
             nadesData.forEach(nade => {
                 const validThrowsForSide = nade.throws.filter(t => t.side === currentSide);
-
                 if (nade.type === currentType && validThrowsForSide.length > 0) {
                     const pin = document.createElement('div');
                     pin.className = 'target-pin';
@@ -452,21 +202,17 @@
                     pin.style.left = nade.targetPosition.left + '%';
                     pin.innerText = validThrowsForSide.length;
                     pin.title = `${nade.title} (${validThrowsForSide.length} Wurfoptionen)`;
-
                     pin.onclick = () => showThrowPinsForTarget(nade, validThrowsForSide);
                     radarBox.appendChild(pin);
                 }
             });
-
             document.getElementById('smoke-count').innerText = nadesData.filter(n => n.type === 'smoke' && n.throws.some(t => t.side === currentSide)).length;
             document.getElementById('molotov-count').innerText = nadesData.filter(n => n.type === 'molotov' && n.throws.some(t => t.side === currentSide)).length;
             document.getElementById('flash-count').innerText = nadesData.filter(n => n.type === 'flash' && n.throws.some(t => t.side === currentSide)).length;
             document.getElementById('he-count').innerText = nadesData.filter(n => n.type === 'he' && n.throws.some(t => t.side === currentSide)).length;
         }
-
         function showThrowPinsForTarget(nade, validThrows) {
             document.querySelectorAll('.target-pin').forEach(p => p.remove());
-
             validThrows.forEach(t => {
                 const throwPin = document.createElement('div');
                 throwPin.className = 'throw-pin';
@@ -474,22 +220,15 @@
                 throwPin.style.left = t.throwPosition.left + '%';
                 throwPin.innerHTML = '🏃';
                 throwPin.title = `Wurf von ${t.from} (${t.technique})`;
-
                 throwPin.onclick = () => openVideoModal(nade, t);
                 radarBox.appendChild(throwPin);
             });
-
             resetBtn.style.display = 'block';
         }
-
-        function resetRadarView() {
-            renderTargetPins();
-        }
-
+        function resetRadarView() { renderTargetPins(); }
         function openVideoModal(nade, throwObj) {
             document.getElementById('modal-title').innerText = `📹 ${nade.title} (Von ${throwObj.from})`;
             const contentContainer = document.getElementById('modal-content');
-            
             contentContainer.innerHTML = `
                 <div class="throw-option">
                     <div class="throw-header">
@@ -504,30 +243,23 @@
                     </div>
                 </div>
             `;
-
             document.getElementById('modal-overlay').classList.add('active');
-
             const videoEl = document.getElementById('active-video');
             if (videoEl) {
                 videoEl.load();
                 let playPromise = videoEl.play();
                 if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log("Autoplay blockiert:", error);
-                    });
+                    playPromise.catch(error => { console.log("Autoplay blockiert:", error); });
                 }
             }
         }
-
         function closeModal() {
             document.getElementById('modal-overlay').classList.remove('active');
             document.getElementById('modal-content').innerHTML = '';
         }
-
         document.getElementById('modal-overlay').onclick = (e) => {
             if (e.target.id === 'modal-overlay') closeModal();
         };
-
         renderTargetPins();
     </script>
 </body>
