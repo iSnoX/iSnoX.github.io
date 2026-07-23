@@ -79,11 +79,12 @@
 
         .map-count {
             font-size: 0.9rem;
-            color: #aaa;
+            color: #ffb400;
             margin-top: 5px;
+            font-weight: bold;
         }
 
-        /* Beispiel Hintergründe (Pfade zu deinen Bildern anpassen) */
+        /* Hintergründe */
         .map-mirage { background-image: url('assets/images/mirage-bg.webp'); }
         .map-dust2  { background-image: url('assets/images/dust2-bg.webp'); }
         .map-cache  { background-image: url('assets/images/cache-bg.webp'); }
@@ -98,48 +99,82 @@
     <h1>SnoX' & Friends Nades</h1>
 
     <div class="map-grid">
-        <a href="mirage.html" class="map-card map-mirage">
+        <a href="mirage.html" class="map-card map-mirage" data-json="mirage.json">
             <div class="map-content">
                 <div class="map-title">Mirage</div>
+                <div class="map-count">Lade...</div>
             </div>
         </a>
 
-        <a href="dust2.html" class="map-card map-dust2">
+        <a href="dust2.html" class="map-card map-dust2" data-json="dust2.json">
             <div class="map-content">
                 <div class="map-title">Dust 2</div>
+                <div class="map-count">Lade...</div>
             </div>
         </a>
 
-        <a href="cache.html" class="map-card map-cache">
+        <a href="cache.html" class="map-card map-cache" data-json="cache.json">
             <div class="map-content">
                 <div class="map-title">Cache</div>
+                <div class="map-count">Lade...</div>
             </div>
         </a>
 
-        <a href="inferno.html" class="map-card map-inferno">
+        <a href="inferno.html" class="map-card map-inferno" data-json="inferno.json">
             <div class="map-content">
                 <div class="map-title">Inferno</div>
+                <div class="map-count">Lade...</div>
             </div>
         </a>
         
-        <a href="ancient.html" class="map-card map-ancient">
+        <a href="ancient.html" class="map-card map-ancient" data-json="ancient.json">
             <div class="map-content">
                 <div class="map-title">Ancient</div>
+                <div class="map-count">Lade...</div>
             </div>
         </a>
         
-        <a href="anubis.html" class="map-card map-anubis">
+        <a href="anubis.html" class="map-card map-anubis" data-json="anubis.json">
             <div class="map-content">
                 <div class="map-title">Anubis</div>
+                <div class="map-count">Lade...</div>
             </div>
         </a>
         
-        <a href="overpass.html" class="map-card map-overpass">
+        <a href="overpass.html" class="map-card map-overpass" data-json="overpass.json">
             <div class="map-content">
                 <div class="map-title">Overpass</div>
+                <div class="map-count">Lade...</div>
             </div>
         </a>
     </div>
 
+    <!-- Automatisch die Anzahl der erstellten Nades aus den JSONs auslesen -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mapCards = document.querySelectorAll('.map-card');
+
+            mapCards.forEach(async (card) => {
+                const jsonFile = card.getAttribute('data-json');
+                const countElement = card.querySelector('.map-count');
+
+                if (!jsonFile) return;
+
+                try {
+                    // Prevent Caching mit Timestamp ?v=...
+                    const response = await fetch(`${jsonFile}?v=${Date.now()}`);
+                    if (response.ok) {
+                        const nades = await response.json();
+                        const count = Array.isArray(nades) ? nades.length : 0;
+                        countElement.innerText = `${count} Lineup${count === 1 ? '' : 's'}`;
+                    } else {
+                        countElement.innerText = `0 Lineups`;
+                    }
+                } catch (err) {
+                    countElement.innerText = `0 Lineups`;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
