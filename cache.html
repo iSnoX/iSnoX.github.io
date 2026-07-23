@@ -27,7 +27,7 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             overflow-y: auto;
             border: 1px solid #222731;
             border-radius: 16px;
@@ -65,6 +65,30 @@
             margin: 5px 0 0 0;
             font-size: 1.8rem;
         }
+
+        /* T / CT Umschalter */
+        .side-filter-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .side-btn {
+            flex: 1;
+            padding: 8px;
+            background: #121418;
+            color: #8f9cae;
+            border: 1px solid #2a303d;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .side-btn:hover { background: #282e3d; color: #fff; }
+        .side-btn.active.t-side { background: #d97706; color: #000; border-color: #f59e0b; }
+        .side-btn.active.ct-side { background: #2563eb; color: #fff; border-color: #3b82f6; }
 
         .filter-box {
             background: #1e222d;
@@ -343,24 +367,30 @@
             </div>
         </div>
 
+        <!-- T / CT Umschalter -->
+        <div class="side-filter-container">
+            <button class="side-btn t-side active" id="btn-side-t" onclick="setSideFilter('T')">T Seite</button>
+            <button class="side-btn ct-side" id="btn-side-ct" onclick="setSideFilter('CT')">CT Seite</button>
+        </div>
+
         <!-- Filter-Boxen -->
         <div class="filter-box">
             <div class="filter-title">Nades</div>
-            <button class="filter-btn active">
+            <button class="filter-btn active" onclick="setNadeTypeFilter('smoke', this)">
                 <span>💨 Smokes</span>
                 <span class="badge" id="smoke-count">0</span>
             </button>
-            <button class="filter-btn">
+            <button class="filter-btn" onclick="setNadeTypeFilter('molotov', this)">
                 <span>🔥 Molotovs</span>
-                <span class="badge">0</span>
+                <span class="badge" id="molotov-count">0</span>
             </button>
-            <button class="filter-btn">
+            <button class="filter-btn" onclick="setNadeTypeFilter('flash', this)">
                 <span>⚡ Flashbangs</span>
-                <span class="badge">0</span>
+                <span class="badge" id="flash-count">0</span>
             </button>
-            <button class="filter-btn">
+            <button class="filter-btn" onclick="setNadeTypeFilter('he', this)">
                 <span>💣 HE Grenades</span>
-                <span class="badge">0</span>
+                <span class="badge" id="he-count">0</span>
             </button>
         </div>
 
@@ -407,6 +437,7 @@
                 targetPosition: { top: 21.4, left: 29.4 },
                 throws: [
                     {
+                        side: "T",
                         from: "Outside Garage",
                         technique: "Jump Throw",
                         videoUrl: "assets/videos/cache-smoke-1.mp4",
@@ -416,36 +447,62 @@
             }
         ];
 
+        let currentSide = "T";
+        let currentType = "smoke";
+
         const radarBox = document.getElementById('radar-box');
         const resetBtn = document.getElementById('reset-btn');
+
+        function setSideFilter(side) {
+            currentSide = side;
+            if(side === 'T') {
+                document.getElementById('btn-side-t').classList.add('active');
+                document.getElementById('btn-side-ct').classList.remove('active');
+            } else {
+                document.getElementById('btn-side-ct').classList.add('active');
+                document.getElementById('btn-side-t').classList.remove('active');
+            }
+            renderTargetPins();
+        }
+
+        function setNadeTypeFilter(type, btnElement) {
+            currentType = type;
+            document.querySelectorAll('.filter-box .filter-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            renderTargetPins();
+        }
 
         function renderTargetPins() {
             document.querySelectorAll('.target-pin, .throw-pin').forEach(p => p.remove());
             resetBtn.style.display = 'none';
 
-            let smokeCount = 0;
-
             nadesData.forEach(nade => {
-                if (nade.type === 'smoke') smokeCount++;
+                const validThrowsForSide = nade.throws.filter(t => t.side === currentSide);
 
-                const pin = document.createElement('div');
-                pin.className = 'target-pin';
-                pin.style.top = nade.targetPosition.top + '%';
-                pin.style.left = nade.targetPosition.left + '%';
-                pin.innerText = nade.throws.length;
-                pin.title = `${nade.title} (${nade.throws.length} Wurfoptionen)`;
+                if (nade.type === currentType && validThrowsForSide.length > 0) {
+                    const pin = document.createElement('div');
+                    pin.className = 'target-pin';
+                    pin.style.top = nade.targetPosition.top + '%';
+                    pin.style.left = nade.targetPosition.left + '%';
+                    pin.innerText = validThrowsForSide.length;
+                    pin.title = `${nade.title} (${validThrowsForSide.length} Wurfoptionen)`;
 
-                pin.onclick = () => showThrowPinsForTarget(nade);
-                radarBox.appendChild(pin);
+                    pin.onclick = () => showThrowPinsForTarget(nade, validThrowsForSide);
+                    radarBox.appendChild(pin);
+                }
             });
 
-            document.getElementById('smoke-count').innerText = smokeCount;
+            // Aktualisiere Badges basierend auf der aktuellen Seite
+            document.getElementById('smoke-count').innerText = nadesData.filter(n => n.type === 'smoke' && n.throws.some(t => t.side === currentSide)).length;
+            document.getElementById('molotov-count').innerText = nadesData.filter(n => n.type === 'molotov' && n.throws.some(t => t.side === currentSide)).length;
+            document.getElementById('flash-count').innerText = nadesData.filter(n => n.type === 'flash' && n.throws.some(t => t.side === currentSide)).length;
+            document.getElementById('he-count').innerText = nadesData.filter(n => n.type === 'he' && n.throws.some(t => t.side === currentSide)).length;
         }
 
-        function showThrowPinsForTarget(nade) {
+        function showThrowPinsForTarget(nade, validThrows) {
             document.querySelectorAll('.target-pin').forEach(p => p.remove());
 
-            nade.throws.forEach(t => {
+            validThrows.forEach(t => {
                 const throwPin = document.createElement('div');
                 throwPin.className = 'throw-pin';
                 throwPin.style.top = t.throwPosition.top + '%';
