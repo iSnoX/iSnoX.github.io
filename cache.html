@@ -109,6 +109,7 @@
         .map-container {
             flex: 1;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background: #121418;
@@ -125,7 +126,7 @@
         }
 
         .radar-img {
-            height: 75vh;
+            height: 70vh;
             width: auto;
             max-width: 100%;
             display: block;
@@ -151,13 +152,58 @@
             border: 2px solid white;
             box-shadow: 0 0 12px rgba(0,0,0,0.6);
             transition: transform 0.2s ease;
+            z-index: 5;
         }
         .target-pin:hover {
             transform: translate(-50%, -50%) scale(1.25);
             z-index: 10;
         }
 
-        /* Pop-up Modal */
+        /* Abwurf-Pin direkt auf dem Haupt-Radar */
+        .throw-pin {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            border: 2px solid white;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.9);
+            transition: transform 0.2s ease;
+            z-index: 5;
+        }
+        .throw-pin:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+            z-index: 10;
+        }
+
+        .radar-controls {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .reset-view-btn {
+            background: #2a303d;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            transition: background 0.2s;
+        }
+        .reset-view-btn:hover { background: #3b4252; }
+
+        /* Pop-up Modal NUR für das Video */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -174,9 +220,9 @@
             background: #171a21;
             border: 1px solid #2a303d;
             border-radius: 16px;
-            width: 96vw;
-            height: 96vh;
-            max-width: 1600px;
+            width: 90vw;
+            height: 90vh;
+            max-width: 1400px;
             display: flex;
             flex-direction: column;
             padding: 20px 30px;
@@ -216,52 +262,6 @@
             gap: 15px;
         }
 
-        /* Mini-Radar Ansicht im Modal für den Abwurf-Ort */
-        .modal-radar-container {
-            position: relative;
-            width: 100%;
-            height: 70vh;
-            background: #121418;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            border: 1px solid #2a303d;
-        }
-
-        .modal-radar-img {
-            height: 100%;
-            width: auto;
-            max-width: 100%;
-            display: block;
-            border-radius: 8px;
-        }
-
-        /* Abwurf-Pin auf dem Modal-Radar */
-        .throw-pin {
-            position: absolute;
-            width: 36px;
-            height: 36px;
-            background: #3b82f6;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transform: translate(-50%, -50%);
-            border: 2px solid white;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
-            transition: transform 0.2s ease;
-        }
-        .throw-pin:hover {
-            transform: translate(-50%, -50%) scale(1.3);
-            z-index: 10;
-        }
-
         .throw-option {
             background: #1e222d;
             border: 1px solid #2a303d;
@@ -269,6 +269,7 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
+            height: 100%;
         }
 
         .throw-header {
@@ -290,33 +291,20 @@
         .video-container {
             position: relative;
             width: 100%;
-            height: 65vh;
+            flex: 1;
             background: #000;
             border-radius: 10px;
             overflow: hidden;
+            min-height: 50vh;
         }
 
         .video-container video {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: cover;
-            border: 0;
+            object-fit: contain;
+            background: #000;
         }
-
-        .back-to-radar-btn {
-            background: #2a303d;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 10px;
-            align-self: flex-start;
-            transition: background 0.2s;
-        }
-        .back-to-radar-btn:hover { background: #3b4252; }
     </style>
 </head>
 <body>
@@ -364,18 +352,21 @@
         </div>
     </aside>
 
-    <!-- Radar-Bereich -->
+    <!-- Radar-Bereich (Hauptfenster) -->
     <main class="map-container">
         <div class="radar-box" id="radar-box">
-            <img src="assets/images/cache-radar.webp" alt="Cache Radar" class="radar-img">
+            <img src="assets/images/cache-radar.webp" alt="Cache Radar" class="radar-img" id="radar-img">
+        </div>
+        <div class="radar-controls">
+            <button class="reset-view-btn" id="reset-btn" onclick="resetRadarView()">← Zurück zu allen Zielorten</button>
         </div>
     </main>
 
-    <!-- Modal Fenster -->
+    <!-- Modal Fenster nur für Video -->
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal-card">
             <div class="modal-header-area">
-                <h2 id="modal-title" style="margin:0; color:#ffb400; font-size:1.8rem;">Zielort</h2>
+                <h2 id="modal-title" style="margin:0; color:#ffb400; font-size:1.5rem;">Wurf-Video</h2>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body" id="modal-content"></div>
@@ -401,8 +392,13 @@
         ];
 
         const radarBox = document.getElementById('radar-box');
+        const resetBtn = document.getElementById('reset-btn');
 
-        function renderPins() {
+        function renderTargetPins() {
+            // Entferne alte Pins falls vorhanden
+            document.querySelectorAll('.target-pin, .throw-pin').forEach(p => p.remove());
+            resetBtn.style.display = 'none';
+
             let smokeCount = 0;
 
             nadesData.forEach(nade => {
@@ -415,28 +411,19 @@
                 pin.innerText = nade.throws.length;
                 pin.title = `${nade.title} (${nade.throws.length} Wurfoptionen)`;
 
-                pin.onclick = () => openTargetModal(nade);
+                // Klick auf Ziel-Pin zeigt den Abwurf-Pin im Hauptfenster
+                pin.onclick = () => showThrowPinsForTarget(nade);
                 radarBox.appendChild(pin);
             });
 
             document.getElementById('smoke-count').innerText = smokeCount;
         }
 
-        // Schritt 1: Zielort geklickt -> Zeige Abwurf-Pins auf dem Modal-Radar
-        function openTargetModal(nade) {
-            document.getElementById('modal-title').innerText = `🎯 Wähle den Abwurf-Ort für: ${nade.title}`;
-            const contentContainer = document.getElementById('modal-content');
-            contentContainer.innerHTML = '';
+        // Schritt 1: Zielort geklickt -> Ziel-Pins ausblenden, Abwurf-Pin auf Haupt-Radar anzeigen
+        function showThrowPinsForTarget(nade) {
+            document.querySelectorAll('.target-pin').forEach(p => p.remove());
 
-            const radarContainer = document.createElement('div');
-            radarContainer.className = 'modal-radar-container';
-
-            const radarImg = document.createElement('img');
-            radarImg.src = 'assets/images/cache-radar.webp';
-            radarImg.className = 'modal-radar-img';
-            radarContainer.appendChild(radarImg);
-
-            nade.throws.forEach((t, index) => {
+            nade.throws.forEach(t => {
                 const throwPin = document.createElement('div');
                 throwPin.className = 'throw-pin';
                 throwPin.style.top = t.throwPosition.top + '%';
@@ -444,49 +431,44 @@
                 throwPin.innerHTML = '🏃';
                 throwPin.title = `Wurf von ${t.from} (${t.technique})`;
 
-                // Schritt 2: Abwurf-Pin geklickt -> Zeige Video
-                throwPin.onclick = () => showVideoView(nade, t);
-                radarContainer.appendChild(throwPin);
+                // Schritt 2: Klick auf Abwurf-Pin öffnet das Video im Modal
+                throwPin.onclick = () => openVideoModal(nade, t);
+                radarBox.appendChild(throwPin);
             });
 
-            contentContainer.appendChild(radarContainer);
-            document.getElementById('modal-overlay').classList.add('active');
+            resetBtn.style.display = 'block';
         }
 
-        // Schritt 3: Video anzeigen nach Klick auf Abwurf-Pin (mit erzwungenem Start)
-        function showVideoView(nade, throwObj) {
+        function resetRadarView() {
+            renderTargetPins();
+        }
+
+        // Schritt 3: Video im Modal abspielen mit erzwungenem Laden gegen schwarzes Bild
+        function openVideoModal(nade, throwObj) {
             document.getElementById('modal-title').innerText = `📹 ${nade.title} (Von ${throwObj.from})`;
             const contentContainer = document.getElementById('modal-content');
-            contentContainer.innerHTML = '';
-
-            const backBtn = document.createElement('button');
-            backBtn.className = 'back-to-radar-btn';
-            backBtn.innerText = '← Zurück zur Abwurf-Übersicht';
-            backBtn.onclick = () => openTargetModal(nade);
-            contentContainer.appendChild(backBtn);
-
-            const throwEl = document.createElement('div');
-            throwEl.className = 'throw-option';
-            throwEl.innerHTML = `
-                <div class="throw-header">
-                    <strong style="font-size:1.25rem; color:#fff;">🏃 Von ${throwObj.from}</strong>
-                    <span class="technique-badge">${throwObj.technique}</span>
-                </div>
-                <div class="video-container">
-                    <video autoplay loop muted playsinline>
-                        <source src="${throwObj.videoUrl}" type="video/mp4">
-                        Dein Browser unterstützt kein HTML5-Video.
-                    </video>
+            contentContainer.innerHTML = `
+                <div class="throw-option">
+                    <div class="throw-header">
+                        <strong style="font-size:1.2rem; color:#fff;">🏃 Von ${throwObj.from}</strong>
+                        <span class="technique-badge">${throwObj.technique}</span>
+                    </div>
+                    <div class="video-container">
+                        <video id="active-video" autoplay loop muted playsinline preload="auto">
+                            <source src="${throwObj.videoUrl}" type="video/mp4">
+                            Dein Browser unterstützt kein HTML5-Video.
+                        </video>
+                    </div>
                 </div>
             `;
-            contentContainer.appendChild(throwEl);
 
-            // Erzwingt das Laden und Abspielen, damit der Bildschirm nicht schwarz bleibt
-            const videoEl = throwEl.querySelector('video');
+            document.getElementById('modal-overlay').classList.add('active');
+
+            const videoEl = document.getElementById('active-video');
             videoEl.load();
-            videoEl.play().catch(error => {
-                console.log("Autoplay wurde vom Browser blockiert oder Video lädt noch:", error);
-            });
+            videoEl.onloadeddata = () => {
+                videoEl.play().catch(e => console.log("Play error:", e));
+            };
         }
 
         function closeModal() {
@@ -498,7 +480,8 @@
             if (e.target.id === 'modal-overlay') closeModal();
         };
 
-        renderPins();
+        // Initiales Laden
+        renderTargetPins();
     </script>
 </body>
 </html>
