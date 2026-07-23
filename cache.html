@@ -241,7 +241,7 @@
             font-size: 0.95rem;
         }
 
-        /* YouTube Container im Großformat */
+        /* Video Container im Großformat */
         .video-container {
             position: relative;
             width: 100%;
@@ -251,10 +251,11 @@
             overflow: hidden;
         }
 
-        .video-container iframe {
+        .video-container video {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
+            object-fit: cover;
             border: 0;
         }
     </style>
@@ -323,7 +324,7 @@
     </div>
 
     <script>
-        // --- DEINE DATENBANK ---
+        // --- DEINE DATENBANK (Mit lokalem MP4-Pfad) ---
         const nadesData = [
             {
                 id: "target-1784803370819",
@@ -334,7 +335,7 @@
                     {
                         from: "Outside Garage",
                         technique: "Jump Throw",
-                        youtubeUrl: "https://www.youtube.com/embed/gBZufK6eADg",
+                        videoUrl: "assets/videos/cache-smoke-1.mp4",
                         throwPosition: { top: 46.8, left: 67.0 }
                     }
                 ]
@@ -363,28 +364,12 @@
             document.getElementById('smoke-count').innerText = smokeCount;
         }
 
-        // YouTube URL für den Embed-Modus vorbereiten (autoplay + loop + keine Steuerung)
-        function getEmbedUrl(url) {
-            let baseUrl = url;
-            if (baseUrl.includes('youtu.be/')) {
-                const id = baseUrl.split('youtu.be/')[1].split('?')[0];
-                baseUrl = `https://www.youtube.com/embed/${id}`;
-            }
-            
-            const videoIdMatch = baseUrl.match(/embed\/([a-zA-Z0-9_-]+)/);
-            const videoId = videoIdMatch ? videoIdMatch[1] : '';
-
-            const separator = baseUrl.includes('?') ? '&' : '?';
-            return `${baseUrl}${separator}autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1`;
-        }
-
         function openModal(nade) {
             document.getElementById('modal-title').innerText = `🎯 ${nade.title}`;
             const listContainer = document.getElementById('modal-throws-list');
             listContainer.innerHTML = '';
 
             nade.throws.forEach((t, index) => {
-                const embedUrl = getEmbedUrl(t.youtubeUrl);
                 const throwEl = document.createElement('div');
                 throwEl.className = 'throw-option';
                 throwEl.innerHTML = `
@@ -393,7 +378,7 @@
                         <span class="technique-badge">${t.technique}</span>
                     </div>
                     <div class="video-container">
-                        <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <video src="${t.videoUrl}" autoplay loop muted playsinline></video>
                     </div>
                 `;
                 listContainer.appendChild(throwEl);
@@ -404,7 +389,7 @@
 
         function closeModal() {
             document.getElementById('modal-overlay').classList.remove('active');
-            document.getElementById('modal-throws-list').innerHTML = ''; // Stoppt das Video beim Schließen
+            document.getElementById('modal-throws-list').innerHTML = ''; // Stoppt und entlädt das Video beim Schließen
         }
 
         document.getElementById('modal-overlay').onclick = (e) => {
