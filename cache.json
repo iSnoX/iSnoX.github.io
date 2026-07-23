@@ -1,0 +1,23 @@
+[
+  {
+    "id": "target-1784819507487",
+    "title": "A cross",
+    "type": "smoke",
+    "targetPosition": {
+      "top": 23.6,
+      "left": 36.3
+    },
+    "throws": [
+      {
+        "side": "T",
+        "from": "Outside Garage",
+        "technique": "Jump Throw",
+        "imageUrl": "assets/screenshots/nade-1784819505998.png",
+        "throwPosition": {
+          "top": 46.3,
+          "left": 66.6
+        }
+      }
+    ]
+  }
+]
