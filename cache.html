@@ -157,7 +157,7 @@
             z-index: 10;
         }
 
-        /* Pop-up Modal (Maximale Größe - fast Vollbild) */
+        /* Pop-up Modal (Riesig, fast Vollbild) */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -241,23 +241,21 @@
             font-size: 0.95rem;
         }
 
-        /* Container für sauberes Video ohne HUD */
+        /* YouTube Container im Großformat */
         .video-container {
             position: relative;
             width: 100%;
+            height: 65vh; /* Sehr groß, damit man alle Fixpunkte sieht */
             background: #000;
             border-radius: 10px;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        .video-container video {
-            width: 100%;
-            max-height: 65vh;
-            object-fit: contain;
-            display: block;
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: 0;
         }
     </style>
 </head>
@@ -313,7 +311,7 @@
         </div>
     </main>
 
-    <!-- Modal Fenster (Fast Vollbild) -->
+    <!-- Modal Fenster (Riesig) -->
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal-card">
             <div class="modal-header-area">
@@ -325,7 +323,7 @@
     </div>
 
     <script>
-        // --- HINWEIS: Trage hier statt YouTube-Links direkte Videodateien ein (.mp4) ---
+        // --- DEINE DATENBANK ---
         const nadesData = [
             {
                 id: "target-1784803370819",
@@ -336,8 +334,7 @@
                     {
                         from: "Outside Garage",
                         technique: "Jump Throw",
-                        // Beispiel für ein lokales MP4-Video im Projektordner:
-                        videoUrl: "assets/videos/cache-smoke-1.mp4",
+                        youtubeUrl: "https://www.youtube.com/embed/gBZufK6eADg",
                         throwPosition: { top: 46.8, left: 67.0 }
                     }
                 ]
@@ -366,12 +363,25 @@
             document.getElementById('smoke-count').innerText = smokeCount;
         }
 
+        // YouTube URL für den Embed-Modus vorbereiten (autoplay + saubere Ansicht)
+        function getEmbedUrl(url) {
+            let baseUrl = url;
+            if (baseUrl.includes('youtu.be/')) {
+                const id = baseUrl.split('youtu.be/')[1].split('?')[0];
+                baseUrl = `https://www.youtube.com/embed/${id}`;
+            }
+            const separator = baseUrl.includes('?') ? '&' : '?';
+            // autoplay=1 sorgt dafür, dass es direkt startet; rel=0 blendet keine fremden Videos ein
+            return `${baseUrl}${separator}autoplay=1&rel=0&modestbranding=1`;
+        }
+
         function openModal(nade) {
             document.getElementById('modal-title').innerText = `🎯 ${nade.title}`;
             const listContainer = document.getElementById('modal-throws-list');
             listContainer.innerHTML = '';
 
             nade.throws.forEach((t, index) => {
+                const embedUrl = getEmbedUrl(t.youtubeUrl);
                 const throwEl = document.createElement('div');
                 throwEl.className = 'throw-option';
                 throwEl.innerHTML = `
@@ -380,8 +390,7 @@
                         <span class="technique-badge">${t.technique}</span>
                     </div>
                     <div class="video-container">
-                        <!-- autoplay, loop, muted, playsinline sorgt für das flüssige CSNades-Verhalten ohne Player-Leiste -->
-                        <video src="${t.videoUrl}" autoplay loop muted playsinline controls></video>
+                        <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 `;
                 listContainer.appendChild(throwEl);
@@ -392,7 +401,7 @@
 
         function closeModal() {
             document.getElementById('modal-overlay').classList.remove('active');
-            document.getElementById('modal-throws-list').innerHTML = '';
+            document.getElementById('modal-throws-list').innerHTML = ''; // Stoppt das Video beim Schließen
         }
 
         document.getElementById('modal-overlay').onclick = (e) => {
