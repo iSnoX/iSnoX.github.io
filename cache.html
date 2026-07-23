@@ -157,7 +157,7 @@
             z-index: 10;
         }
 
-        /* Pop-up Modal (Riesig, fast Vollbild) */
+        /* Pop-up Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -216,6 +216,52 @@
             gap: 15px;
         }
 
+        /* Mini-Radar Ansicht im Modal für den Abwurf-Ort */
+        .modal-radar-container {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            background: #121418;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 1px solid #2a303d;
+        }
+
+        .modal-radar-img {
+            height: 100%;
+            width: auto;
+            max-width: 100%;
+            display: block;
+            border-radius: 8px;
+        }
+
+        /* Abwurf-Pin auf dem Modal-Radar */
+        .throw-pin {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            border: 2px solid white;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+            transition: transform 0.2s ease;
+        }
+        .throw-pin:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+            z-index: 10;
+        }
+
         .throw-option {
             background: #1e222d;
             border: 1px solid #2a303d;
@@ -241,11 +287,10 @@
             font-size: 0.95rem;
         }
 
-        /* Video Container im Großformat */
         .video-container {
             position: relative;
             width: 100%;
-            height: 65vh; /* Sehr groß, damit man alle Fixpunkte sieht */
+            height: 65vh;
             background: #000;
             border-radius: 10px;
             overflow: hidden;
@@ -258,6 +303,20 @@
             object-fit: cover;
             border: 0;
         }
+
+        .back-to-radar-btn {
+            background: #2a303d;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+            align-self: flex-start;
+            transition: background 0.2s;
+        }
+        .back-to-radar-btn:hover { background: #3b4252; }
     </style>
 </head>
 <body>
@@ -312,19 +371,18 @@
         </div>
     </main>
 
-    <!-- Modal Fenster (Riesig) -->
+    <!-- Modal Fenster -->
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal-card">
             <div class="modal-header-area">
                 <h2 id="modal-title" style="margin:0; color:#ffb400; font-size:1.8rem;">Zielort</h2>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
-            <div class="modal-body" id="modal-throws-list"></div>
+            <div class="modal-body" id="modal-content"></div>
         </div>
     </div>
 
     <script>
-        // --- DEINE DATENBANK (Mit lokalem MP4-Pfad) ---
         const nadesData = [
             {
                 id: "target-1784803370819",
@@ -357,39 +415,83 @@
                 pin.innerText = nade.throws.length;
                 pin.title = `${nade.title} (${nade.throws.length} Wurfoptionen)`;
 
-                pin.onclick = () => openModal(nade);
+                pin.onclick = () => openTargetModal(nade);
                 radarBox.appendChild(pin);
             });
 
             document.getElementById('smoke-count').innerText = smokeCount;
         }
 
-        function openModal(nade) {
-            document.getElementById('modal-title').innerText = `🎯 ${nade.title}`;
-            const listContainer = document.getElementById('modal-throws-list');
-            listContainer.innerHTML = '';
+        // Schritt 1: Zielort geklickt -> Zeige Abwurf-Pins auf dem Modal-Radar
+        function openTargetModal(nade) {
+            document.getElementById('modal-title').innerText = `🎯 Wähle den Abwurf-Ort für: ${nade.title}`;
+            const contentContainer = document.getElementById('modal-content');
+            contentContainer.innerHTML = '';
+
+            const radarContainer = document.createElement('div');
+            radarContainer.className = 'modal-radar-container';
+
+            const radarImg = document.createElement('img');
+            radarImg.src = 'assets/images/cache-radar.webp';
+            radarImg.className = 'modal-radar-img';
+            radarContainer.appendChild(radarImg);
 
             nade.throws.forEach((t, index) => {
-                const throwEl = document.createElement('div');
-                throwEl.className = 'throw-option';
-                throwEl.innerHTML = `
-                    <div class="throw-header">
-                        <strong style="font-size:1.25rem; color:#fff;">🏃 Wurf #${index + 1}: Von ${t.from}</strong>
-                        <span class="technique-badge">${t.technique}</span>
-                    </div>
-                    <div class="video-container">
-                        <video src="${t.videoUrl}" autoplay loop muted playsinline></video>
-                    </div>
-                `;
-                listContainer.appendChild(throwEl);
+                const throwPin = document.createElement('div');
+                throwPin.className = 'throw-pin';
+                throwPin.style.top = t.throwPosition.top + '%';
+                throwPin.style.left = t.throwPosition.left + '%';
+                throwPin.innerHTML = '🏃';
+                throwPin.title = `Wurf von ${t.from} (${t.technique})`;
+
+                // Schritt 2: Abwurf-Pin geklickt -> Zeige Video
+                throwPin.onclick = () => showVideoView(nade, t);
+                radarContainer.appendChild(throwPin);
             });
 
+            contentContainer.appendChild(radarContainer);
             document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        // Schritt 3: Video anzeigen nach Klick auf Abwurf-Pin (mit erzwungenem Start)
+        function showVideoView(nade, throwObj) {
+            document.getElementById('modal-title').innerText = `📹 ${nade.title} (Von ${throwObj.from})`;
+            const contentContainer = document.getElementById('modal-content');
+            contentContainer.innerHTML = '';
+
+            const backBtn = document.createElement('button');
+            backBtn.className = 'back-to-radar-btn';
+            backBtn.innerText = '← Zurück zur Abwurf-Übersicht';
+            backBtn.onclick = () => openTargetModal(nade);
+            contentContainer.appendChild(backBtn);
+
+            const throwEl = document.createElement('div');
+            throwEl.className = 'throw-option';
+            throwEl.innerHTML = `
+                <div class="throw-header">
+                    <strong style="font-size:1.25rem; color:#fff;">🏃 Von ${throwObj.from}</strong>
+                    <span class="technique-badge">${throwObj.technique}</span>
+                </div>
+                <div class="video-container">
+                    <video autoplay loop muted playsinline>
+                        <source src="${throwObj.videoUrl}" type="video/mp4">
+                        Dein Browser unterstützt kein HTML5-Video.
+                    </video>
+                </div>
+            `;
+            contentContainer.appendChild(throwEl);
+
+            // Erzwingt das Laden und Abspielen, damit der Bildschirm nicht schwarz bleibt
+            const videoEl = throwEl.querySelector('video');
+            videoEl.load();
+            videoEl.play().catch(error => {
+                console.log("Autoplay wurde vom Browser blockiert oder Video lädt noch:", error);
+            });
         }
 
         function closeModal() {
             document.getElementById('modal-overlay').classList.remove('active');
-            document.getElementById('modal-throws-list').innerHTML = ''; // Stoppt und entlädt das Video beim Schließen
+            document.getElementById('modal-content').innerHTML = '';
         }
 
         document.getElementById('modal-overlay').onclick = (e) => {
