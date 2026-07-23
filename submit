@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+    <title>Nade einsenden - CS2 Nades</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: #0e1013;
+            color: white;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .submit-container {
+            width: 100%;
+            max-width: 900px;
+            background: #171a21;
+            border: 1px solid #222731;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #222731;
+            padding-bottom: 15px;
+        }
+
+        .back-btn {
+            color: #8f9cae;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .back-btn:hover { color: #fff; }
+
+        /* Formular-Elemente */
+        .step { display: none; }
+        .step.active { display: block; }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: #8f9cae;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            background: #1e222d;
+            border: 1px solid #2a303d;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: #ffb400;
+        }
+
+        .btn {
+            background: #ffb400;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+        }
+        .btn:hover { background: #e09e00; }
+        .btn:active { transform: scale(0.98); }
+
+        /* Step 2 Layout: Map & Anweisungen */
+        .map-picker-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .instruction-badge {
+            background: #1e222d;
+            border: 1px solid #2a303d;
+            padding: 10px 18px;
+            border-radius: 20px;
+            color: #ffb400;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .radar-box {
+            position: relative;
+            display: inline-block;
+            cursor: crosshair;
+            margin: 10px 0;
+        }
+
+        .radar-img {
+            max-height: 55vh;
+            width: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* Marker Pins */
+        .pin {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 11px;
+            color: black;
+            transform: translate(-50%, -50%);
+            border: 2px solid white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+        .pin-target { background: #ff4757; color: white; } /* Ziel (Landeort) */
+        .pin-throw { background: #2ed573; color: black; }  /* Abwurfposition */
+
+        .output-box {
+            background: #121418;
+            border: 1px dashed #ffb400;
+            border-radius: 8px;
+            padding: 15px;
+            width: 100%;
+            margin-top: 15px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="submit-container">
+    <div class="header">
+        <h2 style="margin:0;">➕ Neue Nade einreichen</h2>
+        <a href="index.html" class="back-link">← Zurück</a>
+    </div>
+
+    <!-- SCHRITT 1: Auswahl der Map & Nade Type -->
+    <div id="step-1" class="step active">
+        <div class="form-group">
+            <label for="map-select">1. Karte auswählen</label>
+            <select id="map-select">
+                <option value="cache" data-img="assets/images/cache-radar.webp">Cache</option>
+                <option value="mirage" data-img="assets/images/mirage-radar.webp">Mirage</option>
+                <option value="dust2" data-img="assets/images/dust2-radar.webp">Dust 2</option>
+                <option value="inferno" data-img="assets/images/inferno-radar.webp">Inferno</option>
+                <option value="ancient" data-img="assets/images/ancient-radar.webp">Ancient</option>
+                <option value="anubis" data-img="assets/images/anubis-radar.webp">Anubis</option>
+                <option value="overpass" data-img="assets/images/overpass-radar.webp">Overpass</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="nade-select">2. Granaten-Typ</label>
+            <select id="nade-select">
+                <option value="smoke">💨 Smoke Grenade</option>
+                <option value="molotov">🔥 Molotov / Incendiary</option>
+                <option value="flash">⚡ Flashbang</option>
+                <option value="he">💣 HE Grenade</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="title-input">3. Bezeichnung / Titel (z. B. "A Main Smoke from T-Spawn")</label>
+            <input type="text" id="title-input" placeholder="Kurzer, prägnanter Name...">
+        </div>
+
+        <button class="btn" onclick="goToStep2()">Weiter zu Schritt 2: Positionen wählen →</button>
+    </div>
+
+    <!-- SCHRITT 2: Interaktive Kartenauswahl -->
+    <div id="step-2" class="step">
+        <div class="map-picker-wrapper">
+            <div id="instruction" class="instruction-badge">
+                🎯 Klicke auf das Radar, wo die Granate LANDET (Zielort)
+            </div>
+
+            <div class="radar-box" id="radar-box">
+                <img id="submit-radar-img" src="" alt="Radar Map" class="radar-img">
+            </div>
+
+            <div id="result-box" class="output-box" style="display:none;">
+                <strong>📍 Generierter Code für dein HTML:</strong>
+                <pre id="code-output" style="color: #ffb400; margin: 10px 0 0 0; white-space: pre-wrap;"></pre>
+            </div>
+
+            <div style="display:flex; gap:10px; width:100%; margin-top:15px;">
+                <button class="btn" style="background:#2a303d; color:#fff;" onclick="resetPicker()">🔄 Positionen zurücksetzen</button>
+                <button class="btn" style="flex:1;" onclick="goToStep1()">← Schritt 1 bearbeiten</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentStep = 1;
+    let targetPos = null; // Wohin die Nade fliegt
+    let throwPos = null;  // Von wo geworfen wird
+
+    function goToStep2() {
+        const selectedOption = document.getElementById('map-select').selectedOptions[0];
+        const mapImgSrc = selectedOption.getAttribute('data-img');
+        
+        // Radarbild dynamisch auf das aus Schritt 1 gewählte setzen
+        document.getElementById('submit-radar-img').src = mapImgSrc;
+
+        document.getElementById('step-1').classList.remove('active');
+        document.getElementById('step-2').classList.add('active');
+        resetPicker();
+    }
+
+    function goToStep1() {
+        document.getElementById('step-2').classList.remove('active');
+        document.getElementById('step-1').classList.add('active');
+    }
+
+    const radarBox = document.getElementById('radar-box');
+    const instruction = document.getElementById('instruction');
+
+    radarBox.addEventListener('click', function(e) {
+        if (e.target.classList.contains('pin')) return;
+
+        const rect = radarBox.getBoundingClientRect();
+        const leftPercent = (((e.clientX - rect.left) / rect.width) * 100).toFixed(1);
+        const topPercent = (((e.clientY - rect.top) / rect.height) * 100).toFixed(1);
+
+        // 1. Klick: Zielort (Landeort)
+        if (!targetPos) {
+            targetPos = { top: topPercent, left: leftPercent };
+            createPin(topPercent, leftPercent, '🎯 Landung', 'pin-target');
+            instruction.innerText = '🏃 Jetzt auf die Karte klicken, VON WO geworfen wird (Abwurfposition)';
+            instruction.style.color = '#2ed573';
+        } 
+        // 2. Klick: Abwurfposition
+        else if (!throwPos) {
+            throwPos = { top: topPercent, left: leftPercent };
+            createPin(topPercent, leftPercent, '🏃 Abwurf', 'pin-throw');
+            instruction.innerText = '✅ Beide Punkte gesetzt!';
+            instruction.style.color = '#fff';
+            generateFinalOutput();
+        }
+    });
+
+    function createPin(top, left, label, className) {
+        const pin = document.createElement('div');
+        pin.className = `pin ${className}`;
+        pin.style.top = top + '%';
+        pin.style.left = left + '%';
+        pin.title = label;
+        pin.innerText = className === 'pin-target' ? '🎯' : '🏃';
+        radarBox.appendChild(pin);
+    }
+
+    function resetPicker() {
+        targetPos = null;
+        throwPos = null;
+        document.querySelectorAll('.pin').forEach(p => p.remove());
+        document.getElementById('result-box').style.display = 'none';
+        instruction.innerText = '🎯 Klicke auf das Radar, wo die Granate LANDET (Zielort)';
+        instruction.style.color = '#ffb400';
+    }
+
+    function generateFinalOutput() {
+        const map = document.getElementById('map-select').value;
+        const type = document.getElementById('nade-select').value;
+        const title = document.getElementById('title-input').value || 'Unbenannte Nade';
+
+        const outputCode = `<!-- ${title} (${type.toUpperCase()}) -->\n` +
+            `<div class="nade-pin target" style="top: ${targetPos.top}%; left: ${targetPos.left}%;" title="${title}">🎯</div>\n` +
+            `<div class="nade-pin throw" style="top: ${throwPos.top}%; left: ${throwPos.left}%;" title="Abwurf für ${title}">🏃</div>`;
+
+        document.getElementById('code-output').innerText = outputCode;
+        document.getElementById('result-box').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
