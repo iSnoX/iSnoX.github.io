@@ -21,7 +21,7 @@
 
         .submit-container {
             width: 100%;
-            max-width: 900px;
+            max-width: 800px;
             background: #171a21;
             border: 1px solid #222731;
             border-radius: 16px;
@@ -42,17 +42,12 @@
             color: #8f9cae;
             text-decoration: none;
             font-size: 0.9rem;
-            transition: color 0.2s;
         }
-        .back-link:hover { color: #fff; }
 
-        /* Formular-Elemente & Schritte */
         .step { display: none; }
         .step.active { display: block; }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         label {
             display: block;
@@ -74,9 +69,7 @@
             outline: none;
         }
 
-        select:focus, input:focus {
-            border-color: #ffb400;
-        }
+        select:focus, input:focus { border-color: #ffb400; }
 
         .btn {
             background: #ffb400;
@@ -87,20 +80,14 @@
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.1s, background 0.2s;
             width: 100%;
             margin-top: 10px;
         }
         .btn:hover { background: #e09e00; }
-        .btn:active { transform: scale(0.98); }
 
-        .btn-secondary {
-            background: #2a303d;
-            color: #fff;
-        }
+        .btn-secondary { background: #2a303d; color: #fff; }
         .btn-secondary:hover { background: #363d4d; }
 
-        /* Step 2 Layout: Map & Anweisungen */
         .map-picker-wrapper {
             display: flex;
             flex-direction: column;
@@ -122,17 +109,15 @@
             position: relative;
             display: inline-block;
             cursor: crosshair;
-            margin: 10px 0;
         }
 
         .radar-img {
-            max-height: 55vh;
+            max-height: 50vh;
             width: auto;
             border-radius: 12px;
             display: block;
         }
 
-        /* Marker Pins */
         .pin {
             position: absolute;
             width: 26px;
@@ -143,10 +128,8 @@
             justify-content: center;
             font-weight: bold;
             font-size: 11px;
-            color: black;
             transform: translate(-50%, -50%);
             border: 2px solid white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
         .pin-target { background: #ff4757; color: white; }
         .pin-throw { background: #2ed573; color: black; }
@@ -156,10 +139,8 @@
             border: 1px dashed #ffb400;
             border-radius: 8px;
             padding: 15px;
-            width: 100%;
-            margin-top: 15px;
+            margin-top: 20px;
             font-family: monospace;
-            font-size: 0.85rem;
         }
     </style>
 </head>
@@ -167,13 +148,12 @@
 
 <div class="submit-container">
     <div class="header">
-        <h2 style="margin:0;">➕ Neue Nade einreichen</h2>
+        <h2 style="margin:0;">➕ Neue Wurfvariante eintragen</h2>
         <a href="index.html" class="back-link">← Zurück</a>
     </div>
 
-    <!-- SCHRITT 1: Auswahl der Map & Nade Type -->
+    <!-- Schritt 1: Infos -->
     <div id="step-1" class="step active">
-        <h3 style="margin-top:0; color:#ffb400;">Schritt 1: Grundinfos</h3>
         <div class="form-group">
             <label for="map-select">1. Karte auswählen</label>
             <select id="map-select">
@@ -188,26 +168,20 @@
         </div>
 
         <div class="form-group">
-            <label for="nade-select">2. Granaten-Typ</label>
-            <select id="nade-select">
-                <option value="smoke">💨 Smoke Grenade</option>
-                <option value="molotov">🔥 Molotov / Incendiary</option>
-                <option value="flash">⚡ Flashbang</option>
-                <option value="he">💣 HE Grenade</option>
-            </select>
+            <label for="title-input">2. Name der Smoke (Zielort)</label>
+            <input type="text" id="title-input" placeholder="z. B. A Main Smoke">
         </div>
 
         <div class="form-group">
-            <label for="title-input">3. Bezeichnung / Titel</label>
-            <input type="text" id="title-input" placeholder="z. B. A Main Smoke from T-Spawn">
+            <label for="from-input">3. Abwurfort (Von wo wird geworfen?)</label>
+            <input type="text" id="from-input" placeholder="z. B. T-Spawn, Mülltonne...">
         </div>
 
-        <button class="btn" onclick="goToStep2()">Weiter zu Schritt 2: Positionen wählen →</button>
+        <button class="btn" onclick="goToStep2()">Weiter zu Schritt 2: Punkte setzen →</button>
     </div>
 
-    <!-- SCHRITT 2: Interaktive Kartenauswahl -->
+    <!-- Schritt 2: Radar Klicks -->
     <div id="step-2" class="step">
-        <h3 style="margin-top:0; color:#ffb400; text-align:center;">Schritt 2: Positionen auf Radar markieren</h3>
         <div class="map-picker-wrapper">
             <div id="instruction" class="instruction-badge">
                 🎯 Klicke auf das Radar, wo die Granate LANDET (Zielort)
@@ -218,45 +192,40 @@
             </div>
 
             <div id="step-2-buttons" style="display:none; width:100%;">
-                <button class="btn" onclick="goToStep3()">Weiter zu Schritt 3: Wurftechnik & Video →</button>
+                <button class="btn" onclick="goToStep3()">Weiter zu Schritt 3: Wurftechnik & YouTube →</button>
             </div>
 
-            <div style="display:flex; gap:10px; width:100%; margin-top:5px;">
-                <button class="btn btn-secondary" onclick="resetPicker()">🔄 Positionen zurücksetzen</button>
-                <button class="btn btn-secondary" onclick="goToStep1()">← Zurück zu Schritt 1</button>
+            <div style="display:flex; gap:10px; width:100%;">
+                <button class="btn btn-secondary" onclick="resetPicker()">🔄 Zurücksetzen</button>
+                <button class="btn btn-secondary" onclick="switchStep('step-1')">← Zurück</button>
             </div>
         </div>
     </div>
 
-    <!-- SCHRITT 3: Wurftechnik & Video-Link -->
+    <!-- Schritt 3: Video & Technik -->
     <div id="step-3" class="step">
-        <h3 style="margin-top:0; color:#ffb400;">Schritt 3: Wurftechnik & Video</h3>
-        
         <div class="form-group">
-            <label for="throw-type">1. Wurftechnik (Wie wird geworfen?)</label>
+            <label for="throw-type">1. Wurftechnik</label>
             <select id="throw-type">
                 <option value="Left Click (Normal)">🖱️ Linksklick (Normal Throw)</option>
-                <option value="Jump Throw">🦘 Jump Throw (Bind/Skript)</option>
-                <option value="W + Jump Throw">🏃‍♂️ W + Jump Throw (Forward Jump)</option>
-                <option value="Right Click (Underhand)">🖱️ Rechtsklick (Underhand / Drop)</option>
-                <option value="Left + Right Click (Middle)">🖱️ Links + Rechtsklick (Medium Throw)</option>
-                <option value="Running Left Click">🏃‍♂️ Laufender Linksklick (Run Throw)</option>
+                <option value="Jump Throw">🦘 Jump Throw</option>
+                <option value="W + Jump Throw">🏃‍♂️ W + Jump Throw</option>
+                <option value="Right Click (Underhand)">🖱️ Rechtsklick (Underhand)</option>
+                <option value="Left + Right Click">🖱️ Links + Rechtsklick</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="video-input">2. Video-Link (YouTube, Medal.tv, Streamable)</label>
-            <input type="url" id="video-input" placeholder="https://medal.tv/games/cs2/clip/...">
-            <small style="color:#8f9cae; font-size:0.8rem;">💡 Da statische Seiten keine großen 50MB MP4-Dateien hosten können, füge hier einfach den Link zum Clip ein!</small>
+            <label for="youtube-input">2. YouTube Link</label>
+            <input type="url" id="youtube-input" placeholder="https://www.youtube.com/watch?v=...">
         </div>
 
-        <button class="btn" style="background:#2ed573;" onclick="generateFinalOutput()">🚀 Granate generieren / abspeichern</button>
-        <button class="btn btn-secondary" onclick="goToStep2()">← Zurück zu den Radar-Pins</button>
+        <button class="btn" style="background:#2ed573;" onclick="generateOutput()">🚀 Code generieren</button>
+        <button class="btn btn-secondary" onclick="switchStep('step-2')">← Zurück</button>
 
         <div id="result-box" class="output-box" style="display:none;">
-            <strong style="color:#2ed573;">✅ Fertiger JSON-Datenblock für dein System:</strong>
-            <pre id="code-output" style="color: #ffb400; margin: 10px 0 0 0; white-space: pre-wrap;"></pre>
-            <button class="btn" style="margin-top:10px; padding:8px;" onclick="copyOutput()">📋 Code kopieren</button>
+            <strong style="color:#2ed573;">Füge diesen Abschnitt in deinen `nadesData`-Block ein:</strong>
+            <pre id="code-output" style="color: #ffb400; margin-top:10px; white-space: pre-wrap;"></pre>
         </div>
     </div>
 </div>
@@ -265,8 +234,9 @@
     let targetPos = null;
     let throwPos = null;
 
-    function goToStep1() {
-        switchStep('step-1');
+    function switchStep(stepId) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById(stepId).classList.add('active');
     }
 
     function goToStep2() {
@@ -280,11 +250,6 @@
         switchStep('step-3');
     }
 
-    function switchStep(stepId) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById(stepId).classList.add('active');
-    }
-
     const radarBox = document.getElementById('radar-box');
     const instruction = document.getElementById('instruction');
 
@@ -292,31 +257,29 @@
         if (e.target.classList.contains('pin')) return;
 
         const rect = radarBox.getBoundingClientRect();
-        const leftPercent = (((e.clientX - rect.left) / rect.width) * 100).toFixed(1);
-        const topPercent = (((e.clientY - rect.top) / rect.height) * 100).toFixed(1);
+        const leftPercent = Math.round(((e.clientX - rect.left) / rect.width) * 100);
+        const topPercent = Math.round(((e.clientY - rect.top) / rect.height) * 100);
 
         if (!targetPos) {
             targetPos = { top: topPercent, left: leftPercent };
-            createPin(topPercent, leftPercent, '🎯 Landung', 'pin-target');
-            instruction.innerText = '🏃 Jetzt auf die Karte klicken, VON WO geworfen wird (Abwurfposition)';
+            createPin(topPercent, leftPercent, 'pin-target', '🎯');
+            instruction.innerText = '🏃 Jetzt auf die Karte klicken, VON WO geworfen wird';
             instruction.style.color = '#2ed573';
-        } 
-        else if (!throwPos) {
+        } else if (!throwPos) {
             throwPos = { top: topPercent, left: leftPercent };
-            createPin(topPercent, leftPercent, '🏃 Abwurf', 'pin-throw');
-            instruction.innerText = '✅ Beide Punkte gesetzt!';
+            createPin(topPercent, leftPercent, 'pin-throw', '🏃');
+            instruction.innerText = '✅ Punkte gesetzt!';
             instruction.style.color = '#fff';
             document.getElementById('step-2-buttons').style.display = 'block';
         }
     });
 
-    function createPin(top, left, label, className) {
+    function createPin(top, left, className, icon) {
         const pin = document.createElement('div');
         pin.className = `pin ${className}`;
         pin.style.top = top + '%';
         pin.style.left = left + '%';
-        pin.title = label;
-        pin.innerText = className === 'pin-target' ? '🎯' : '🏃';
+        pin.innerText = icon;
         radarBox.appendChild(pin);
     }
 
@@ -325,37 +288,50 @@
         throwPos = null;
         document.querySelectorAll('.pin').forEach(p => p.remove());
         document.getElementById('step-2-buttons').style.display = 'none';
-        instruction.innerText = '🎯 Klicke auf das Radar, wo die Granate LANDET (Zielort)';
+        instruction.innerText = '🎯 Klicke auf das Radar, wo die Granate LANDET';
         instruction.style.color = '#ffb400';
     }
 
-    function generateFinalOutput() {
-        const map = document.getElementById('map-select').value;
-        const type = document.getElementById('nade-select').value;
-        const title = document.getElementById('title-input').value || 'Unbenannte Nade';
-        const throwType = document.getElementById('throw-type').value;
-        const videoUrl = document.getElementById('video-input').value || 'Kein Link angegeben';
-
-        // Erstellt ein sauberes Daten-Objekt (JSON), das später für Datenbanken oder dynamisches Laden perfekt ist
-        const nadeData = {
-            id: Date.now(),
-            map: map,
-            type: type,
-            title: title,
-            technique: throwType,
-            video: videoUrl,
-            targetPosition: { top: `${targetPos.top}%`, left: `${targetPos.left}%` },
-            throwPosition: { top: `${throwPos.top}%`, left: `${throwPos.left}%` }
-        };
-
-        document.getElementById('code-output').innerText = JSON.stringify(nadeData, null, 2);
-        document.getElementById('result-box').style.display = 'block';
+    function convertYoutubeUrl(url) {
+        // Wandelt reguläre YouTube-URLs in Embed-URLs um
+        let videoId = "";
+        if (url.includes("v=")) {
+            videoId = url.split("v=")[1].split("&")[0];
+        } else if (url.includes("youtu.be/")) {
+            videoId = url.split("youtu.be/")[1].split("?")[0];
+        }
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
     }
 
-    function copyOutput() {
-        const text = document.getElementById('code-output').innerText;
-        navigator.clipboard.writeText(text);
-        alert('Code wurde in die Zwischenablage kopiert!');
+    function generateOutput() {
+        const title = document.getElementById('title-input').value || 'Neue Smoke';
+        const from = document.getElementById('from-input').value || 'Unbekannt';
+        const technique = document.getElementById('throw-type').value;
+        const rawUrl = document.getElementById('youtube-input').value;
+        const embedUrl = convertYoutubeUrl(rawUrl);
+
+        const throwData = {
+            from: from,
+            technique: technique,
+            youtubeUrl: embedUrl,
+            throwPosition: { top: throwPos.top, left: throwPos.left }
+        };
+
+        const fullNadeStructure = {
+            id: "target-" + Date.now(),
+            title: title,
+            type: "smoke",
+            targetPosition: { top: targetPos.top, left: targetPos.left },
+            throws: [ throwData ]
+        };
+
+        document.getElementById('code-output').innerText = 
+            "// 1. Wenn es den ZIELORT noch nicht gibt, füge das hinzu:\n" +
+            JSON.stringify(fullNadeStructure, null, 2) + "\n\n" +
+            "// 2. Wenn es den Zielort SCHON GIBT, füge nur diesen Wurf zu 'throws' hinzu:\n" +
+            JSON.stringify(throwData, null, 2);
+
+        document.getElementById('result-box').style.display = 'block';
     }
 </script>
 
