@@ -116,6 +116,7 @@ body {
 .radar-box {
     position: relative;
     display: inline-block;
+    cursor: crosshair; /* Zeigt ein Fadenkreuz an beim Drüberfahren */
 }
 
 .radar-img {
@@ -167,6 +168,14 @@ body {
             </div>
         </div>
 
+        <!-- 📌 PIN PICKER TOOL (Gibt den fertigen Code beim Klick aus) -->
+        <div class="filter-box" style="border: 1px solid #ffb400;">
+            <div class="filter-title" style="color: #ffb400;">📌 Pin Picker Tool</div>
+            <div id="pin-coords" style="padding: 10px; font-family: monospace; font-size: 0.8rem; color: #fff; line-height: 1.4;">
+                Klicke auf eine Stelle auf der Karte...
+            </div>
+        </div>
+
         <!-- Nades Kategorie-Filter -->
         <div class="filter-box">
             <div class="filter-title">Nades</div>
@@ -195,8 +204,8 @@ body {
             <a href="dust2.html" class="filter-btn" style="text-decoration:none;">Dust 2</a>
             <a href="inferno.html" class="filter-btn" style="text-decoration:none;">Inferno</a>
             <a href="ancient.html" class="filter-btn" style="text-decoration:none;">Ancient</a>
-            <a href="ancient.html" class="filter-btn" style="text-decoration:none;">Anubis</a>
-            <a href="ancient.html" class="filter-btn" style="text-decoration:none;">Overpass</a>
+            <a href="anubis.html" class="filter-btn" style="text-decoration:none;">Anubis</a>
+            <a href="overpass.html" class="filter-btn" style="text-decoration:none;">Overpass</a>
         </div>
     </aside>
 
@@ -211,5 +220,48 @@ body {
         </div>
     </main>
 
+    <!-- JS Skript für die Klick-Erkennung & automatisches Generieren -->
+    <script>
+        const radarBox = document.querySelector('.radar-box');
+        const coordsDisplay = document.getElementById('pin-coords');
+
+        radarBox.addEventListener('click', function(e) {
+            // Verhindert das Auslösen, wenn man auf einen bereits bestehenden Pin klickt
+            if (e.target.classList.contains('nade-pin')) return;
+
+            const rect = radarBox.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Prozentuale Berechnung bezogen auf das Radarbild
+            const leftPercent = ((x / rect.width) * 100).toFixed(1);
+            const topPercent = ((y / rect.height) * 100).toFixed(1);
+
+            const generatedCSS = `top: ${topPercent}%; left: ${leftPercent}%;`;
+            const generatedHTML = `<div class="nade-pin" style="top: ${topPercent}%; left: ${leftPercent}%;">1</div>`;
+
+            coordsDisplay.innerHTML = `
+                <strong>Position:</strong><br>
+                <code style="color:#ffb400;">${generatedCSS}</code><br><br>
+                <button onclick="navigator.clipboard.writeText('${generatedHTML}')" style="background:#ffb400; color:#000; border:none; border-radius:4px; padding:6px 10px; cursor:pointer; font-weight:bold; width:100%;">
+                    📋 HTML kopieren
+                </button>
+            `;
+
+            // Setzt temporär einen pinken Test-Pin an die geklickte Stelle
+            let tempPin = document.getElementById('temp-pin');
+            if (!tempPin) {
+                tempPin = document.createElement('div');
+                tempPin.id = 'temp-pin';
+                tempPin.className = 'nade-pin';
+                tempPin.style.background = '#ff0055';
+                tempPin.style.borderColor = '#ffffff';
+                radarBox.appendChild(tempPin);
+            }
+            tempPin.style.top = topPercent + '%';
+            tempPin.style.left = leftPercent + '%';
+            tempPin.innerText = 'X';
+        });
+    </script>
 </body>
 </html>
