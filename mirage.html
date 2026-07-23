@@ -150,22 +150,24 @@
         </div>
     </div>
     <script>
+        // DATEN FÜR Nades (mit Eigenschaft side: "T" oder "CT")
         const nadesData = [
+            /* Beispiel-Eintrag für Nades:
             {
-                id: "target-mirage-1",
-                title: "Mirage Smoke: A-Site Window",
-                type: "smoke",
+                id: "target-1",
+                title: "Dust 2 Smoke: Long A Crossing",
+                side: "T", // "T" oder "CT"
                 targetPosition: { top: 40.0, left: 50.0 },
                 throws: [
                     {
-                        side: "T",
                         from: "T Spawn",
-                        technique: "Jump Throw",
-                        videoUrl: "assets/videos/mirage-smoke-1.mp4",
-                        throwPosition: { top: 70.0, left: 50.0 }
+                        technique: "Standard",
+                        videoUrl: "assets/videos/map-location-nadetype.mp4",
+                        throwPosition: { top: 80.0, left: 30.0 }
                     }
                 ]
             }
+            */
         ];
         let currentSide = "T";
         let currentType = "smoke";
