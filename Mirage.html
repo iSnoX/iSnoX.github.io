@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+    <title>Mirage - CS2 Nades</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #121418;
+            color: white;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden; /* Verhindert unnötige Scrollbalken */
+        }
+
+        /* Linke Sidebar - Angepasst an CSNADES */
+        .sidebar {
+            width: 300px;
+            min-width: 300px;
+            background: #171a21;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #222731;
+        }
+
+        .back-link {
+            color: #8f9cae;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #fff; }
+
+        .map-header h1 {
+            margin: 5px 0 0 0;
+            font-size: 1.8rem;
+        }
+
+        /* Filter-Box (Nades) */
+        .filter-box {
+            background: #1e222d;
+            border-radius: 12px;
+            padding: 8px;
+            border: 1px solid #2a303d;
+        }
+
+        .filter-title {
+            font-size: 0.75rem;
+            color: #8f9cae;
+            text-transform: uppercase;
+            font-weight: bold;
+            padding: 8px 12px;
+        }
+
+        .filter-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 14px;
+            margin-bottom: 4px;
+            background: transparent;
+            color: #c3cddb;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: #282e3d;
+            color: #fff;
+        }
+
+        .filter-btn.active {
+            background: #2e3547;
+            color: #fff;
+        }
+
+        .badge {
+            background: #121418;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: #8f9cae;
+        }
+
+        /* Rechter Hauptbereich mit vergrößertem Radar */
+        .map-container {
+            flex: 1;
+            height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0e1013;
+        }
+
+        /* Das Radar-Bild füllt jetzt fast die gesamte Höhe aus */
+        .radar-box {
+            position: relative;
+            height: 92vh; /* Nimmt 92% der Bildschirmhöhe ein */
+            aspect-ratio: 1 / 1; /* Hält das Bild perfekt quadratisch */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .radar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.6));
+        }
+
+        /* Pins auf dem Radar */
+        .nade-pin {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            background: #ffb400;
+            color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            border: 2px solid white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease;
+        }
+
+        .nade-pin:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+            z-index: 10;
+        }
+
+        /* Pin Positionsbeispiele */
+        .pin-1 { top: 38%; left: 45%; }
+        .pin-2 { top: 62%; left: 52%; }
+    </style>
+</head>
+<body>
+
+    <!-- Linke Seitenleiste -->
+    <aside class="sidebar">
+        <div>
+            <a href="index.html" class="back-link">← Zurück zur Übersicht</a>
+            <div class="map-header">
+                <h1>Mirage</h1>
+            </div>
+        </div>
+
+        <!-- Nades Kategorie-Filter -->
+        <div class="filter-box">
+            <div class="filter-title">Nades</div>
+            <button class="filter-btn active">
+                <span>💨 Smokes</span>
+                <span class="badge">26</span>
+            </button>
+            <button class="filter-btn">
+                <span>🔥 Molotovs</span>
+                <span class="badge">8</span>
+            </button>
+            <button class="filter-btn">
+                <span>⚡ Flashbangs</span>
+                <span class="badge">1</span>
+            </button>
+            <button class="filter-btn">
+                <span>💣 HE Grenades</span>
+                <span class="badge">1</span>
+            </button>
+        </div>
+
+        <!-- Schnellnavigation zu anderen Maps -->
+        <div class="filter-box">
+            <div class="filter-title">Maps</div>
+            <a href="mirage.html" class="filter-btn" style="text-decoration:none;">Mirage</a>
+            <a href="dust2.html" class="filter-btn" style="text-decoration:none;">Dust 2</a>
+            <a href="inferno.html" class="filter-btn" style="text-decoration:none;">Inferno</a>
+            <a href="ancient.html" class="filter-btn" style="text-decoration:none;">Ancient</a>
+            <a href="ancient.html" class="filter-btn" style="text-decoration:none;">Anubis</a>
+            <a href="ancient.html" class="filter-btn" style="text-decoration:none;">Overpass</a>
+        </div>
+    </aside>
+
+    <!-- Radar Bereich (Gefüllt & Vergrößert) -->
+    <main class="map-container">
+        <div class="radar-box">
+            <img src="assets/images/mirage-radar.png" alt="Mirage Radar" class="radar-img">
+
+            <!-- Interaktive Pins -->
+            <div class="nade-pin pin-1" title="Middle Smoke">2</div>
+            <div class="nade-pin pin-2" title="B Site Smoke">3</div>
+        </div>
+    </main>
+
+</body>
+</html>
