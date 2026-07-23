@@ -168,12 +168,20 @@
         </div>
 
         <div class="form-group">
-            <label for="title-input">2. Name der Smoke (Zielort)</label>
+            <label for="side-select">2. Seite (T oder CT)</label>
+            <select id="side-select">
+                <option value="T">Terrorists (T-Seite)</option>
+                <option value="CT">Counter-Terrorists (CT-Seite)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="title-input">3. Name der Smoke (Zielort)</label>
             <input type="text" id="title-input" placeholder="z. B. A Main Smoke">
         </div>
 
         <div class="form-group">
-            <label for="from-input">3. Abwurfort (Von wo wird geworfen?)</label>
+            <label for="from-input">4. Abwurfort (Von wo wird geworfen?)</label>
             <input type="text" id="from-input" placeholder="z. B. T-Spawn, Mülltonne...">
         </div>
 
@@ -293,7 +301,6 @@
     }
 
     function convertYoutubeUrl(url) {
-        // Wandelt reguläre YouTube-URLs in Embed-URLs um
         let videoId = "";
         if (url.includes("v=")) {
             videoId = url.split("v=")[1].split("&")[0];
@@ -304,6 +311,7 @@
     }
 
     function generateOutput() {
+        const side = document.getElementById('side-select').value;
         const title = document.getElementById('title-input').value || 'Neue Smoke';
         const from = document.getElementById('from-input').value || 'Unbekannt';
         const technique = document.getElementById('throw-type').value;
@@ -311,9 +319,10 @@
         const embedUrl = convertYoutubeUrl(rawUrl);
 
         const throwData = {
+            side: side,
             from: from,
             technique: technique,
-            youtubeUrl: embedUrl,
+            videoUrl: embedUrl,
             throwPosition: { top: throwPos.top, left: throwPos.left }
         };
 
