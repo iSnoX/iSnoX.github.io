@@ -317,24 +317,16 @@
             </div>
         </div>
 
-        <!-- Filter-Boxen -->
+        <!-- Filter-Boxen (T / CT Nades) -->
         <div class="filter-box">
-            <div class="filter-title">Nades</div>
-            <button class="filter-btn active">
-                <span>💨 Smokes</span>
-                <span class="badge" id="smoke-count">0</span>
+            <div class="filter-title">Seiten</div>
+            <button class="filter-btn active" id="btn-t" onclick="setSide('T')">
+                <span>🟡 T Nades</span>
+                <span class="badge" id="t-count">0</span>
             </button>
-            <button class="filter-btn">
-                <span>🔥 Molotovs</span>
-                <span class="badge" id="molotov-count">0</span>
-            </button>
-            <button class="filter-btn">
-                <span>⚡ Flashbangs</span>
-                <span class="badge" id="flash-count">0</span>
-            </button>
-            <button class="filter-btn">
-                <span>💣 HE Grenades</span>
-                <span class="badge" id="he-count">0</span>
+            <button class="filter-btn" id="btn-ct" onclick="setSide('CT')">
+                <span>🔵 CT Nades</span>
+                <span class="badge" id="ct-count">0</span>
             </button>
         </div>
 
@@ -374,13 +366,13 @@
     </div>
 
     <script>
-        // DATEN FÜR INFERNO
+        // DATEN FÜR INFERNO (mit Eigenschaft side: "T" oder "CT")
         const nadesData = [
             /* Beispiel-Eintrag für Inferno:
             {
                 id: "target-1",
                 title: "Inferno Smoke: Coffin",
-                type: "smoke", // Optionen: 'smoke', 'molotov', 'flash', 'he'
+                side: "T", // "T" oder "CT"
                 targetPosition: { top: 40.0, left: 50.0 },
                 throws: [
                     {
@@ -394,36 +386,42 @@
             */
         ];
 
+        let currentSide = 'T';
         const radarBox = document.getElementById('radar-box');
         const resetBtn = document.getElementById('reset-btn');
+
+        function setSide(side) {
+            currentSide = side;
+            document.getElementById('btn-t').classList.toggle('active', side === 'T');
+            document.getElementById('btn-ct').classList.toggle('active', side === 'CT');
+            renderTargetPins();
+        }
 
         function renderTargetPins() {
             document.querySelectorAll('.target-pin, .throw-pin').forEach(p => p.remove());
             resetBtn.style.display = 'none';
 
-            let smokeCount = 0, molotovCount = 0, flashCount = 0, heCount = 0;
+            let tCount = 0, ctCount = 0;
 
             nadesData.forEach(nade => {
-                if (nade.type === 'smoke') smokeCount++;
-                if (nade.type === 'molotov') molotovCount++;
-                if (nade.type === 'flash') flashCount++;
-                if (nade.type === 'he') heCount++;
+                if (nade.side === 'T') tCount++;
+                if (nade.side === 'CT') ctCount++;
 
-                const pin = document.createElement('div');
-                pin.className = 'target-pin';
-                pin.style.top = nade.targetPosition.top + '%';
-                pin.style.left = nade.targetPosition.left + '%';
-                pin.innerText = nade.throws.length;
-                pin.title = `${nade.title} (${nade.throws.length} Wurfoptionen)`;
+                if (nade.side === currentSide) {
+                    const pin = document.createElement('div');
+                    pin.className = 'target-pin';
+                    pin.style.top = nade.targetPosition.top + '%';
+                    pin.style.left = nade.targetPosition.left + '%';
+                    pin.innerText = nade.throws.length;
+                    pin.title = `${nade.title} (${nade.throws.length} Wurfoptionen)`;
 
-                pin.onclick = () => showThrowPinsForTarget(nade);
-                radarBox.appendChild(pin);
+                    pin.onclick = () => showThrowPinsForTarget(nade);
+                    radarBox.appendChild(pin);
+                }
             });
 
-            document.getElementById('smoke-count').innerText = smokeCount;
-            document.getElementById('molotov-count').innerText = molotovCount;
-            document.getElementById('flash-count').innerText = flashCount;
-            document.getElementById('he-count').innerText = heCount;
+            document.getElementById('t-count').innerText = tCount;
+            document.getElementById('ct-count').innerText = ctCount;
         }
 
         function showThrowPinsForTarget(nade) {
