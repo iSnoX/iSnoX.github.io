@@ -1,180 +1,166 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="de">
-<head>
-    <title>CS2 Nades & Lineups</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-        body {
-            background-color: #121418;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="SnoX - persönliche Seite mit Social Media, CS2-Settings und aktuellen Projekten."
+    />
+    <title>SnoX | Mein Leben</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="brand">SnoX</div>
+        <nav class="nav" aria-label="Hauptnavigation">
+          <a href="#home">Start</a>
+          <a href="#socials">Socials</a>
+          <a href="#cs">CS</a>
+          <a href="#projects">Projekte</a>
+          <a href="#about">Über mich</a>
+        </nav>
+      </header>
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            color: #ffb400; /* CS Yellow / Gold */
-        }
-
-        /* Map Grid Container */
-        .map-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        /* Einzelne Map Card */
-        .map-card {
-            position: relative;
-            height: 220px;
-            border-radius: 12px;
-            overflow: hidden;
-            text-decoration: none;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-            border: 2px solid #2a2e37;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 20px;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .map-card:hover {
-            transform: translateY(-5px);
-            border-color: #ffb400;
-        }
-
-        /* Dunkler Verlauf über dem Bild für Lesbarkeit */
-        .map-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.2) 70%);
-            z-index: 1;
-        }
-
-        .map-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-        }
-
-        .map-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 0;
-        }
-
-        .map-count {
-            font-size: 0.9rem;
-            color: #ffb400;
-            margin-top: 5px;
-            font-weight: bold;
-        }
-
-        /* Hintergründe */
-        .map-mirage { background-image: url('assets/images/mirage-bg.webp'); }
-        .map-dust2  { background-image: url('assets/images/dust2-bg.webp'); }
-        .map-cache  { background-image: url('assets/images/cache-bg.webp'); }
-        .map-inferno { background-image: url('assets/images/inferno-bg.webp'); }
-        .map-ancient { background-image: url('assets/images/ancient-bg.webp'); }
-        .map-anubis { background-image: url('assets/images/anubis-bg.webp'); }
-        .map-overpass { background-image: url('assets/images/overpass-bg.webp'); }
-    </style>
-</head>
-<body>
-
-    <h1>SnoX' & Friends Nades</h1>
-
-    <div class="map-grid">
-        <a href="mirage.html" class="map-card map-mirage" data-json="mirage.json">
-            <div class="map-content">
-                <div class="map-title">Mirage</div>
-                <div class="map-count">Lade...</div>
+      <main>
+        <section id="home" class="hero">
+          <div class="hero-text">
+            <p class="eyebrow">Willkommen</p>
+            <h1>Hey, ich bin <span>SnoX</span></h1>
+            <p class="lead">
+              Gamer, Technik-Fan und jemand, der immer gerade neue Dinge ausprobiert.
+              Hier bekommst du einen schnellen Blick auf meine Socials, meine CS2-Settings
+              und meine aktuellen Projekte.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#socials">Meine Links</a>
+              <a class="button button-secondary" href="#projects">Projekte ansehen</a>
             </div>
-        </a>
+            <div class="badge-row" aria-label="Interessen">
+              <span>Gamer</span>
+              <span>Creator</span>
+              <span>Tech</span>
+            </div>
+          </div>
 
-        <a href="dust2.html" class="map-card map-dust2" data-json="dust2.json">
-            <div class="map-content">
-                <div class="map-title">Dust 2</div>
-                <div class="map-count">Lade...</div>
-            </div>
-        </a>
+          <aside class="profile-card" aria-label="Profil kartiert">
+            <div class="avatar">S</div>
+            <h2>SnoX</h2>
+            <p>Lebensstil, Gaming & Projekte</p>
+            <ul>
+              <li>Aktiv auf Social Media</li>
+              <li>CS2-Settings & Setup</li>
+              <li>Projekte im Aufbau</li>
+            </ul>
+          </aside>
+        </section>
 
-        <a href="cache.html" class="map-card map-cache" data-json="cache.json">
-            <div class="map-content">
-                <div class="map-title">Cache</div>
-                <div class="map-count">Lade...</div>
-            </div>
-        </a>
+        <section id="socials" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Links</p>
+            <h2>Social Media</h2>
+          </div>
 
-        <a href="inferno.html" class="map-card map-inferno" data-json="inferno.json">
-            <div class="map-content">
-                <div class="map-title">Inferno</div>
-                <div class="map-count">Lade...</div>
-            </div>
-        </a>
-        
-        <a href="ancient.html" class="map-card map-ancient" data-json="ancient.json">
-            <div class="map-content">
-                <div class="map-title">Ancient</div>
-                <div class="map-count">Lade...</div>
-            </div>
-        </a>
-        
-        <a href="anubis.html" class="map-card map-anubis" data-json="anubis.json">
-            <div class="map-content">
-                <div class="map-title">Anubis</div>
-                <div class="map-count">Lade...</div>
-            </div>
-        </a>
-        
-        <a href="overpass.html" class="map-card map-overpass" data-json="overpass.json">
-            <div class="map-content">
-                <div class="map-title">Overpass</div>
-                <div class="map-count">Lade...</div>
-            </div>
-        </a>
+          <div class="card-grid three-col">
+            <a class="social-card" href="https://instagram.com/" target="_blank" rel="noreferrer">
+              <span class="social-icon">◎</span>
+              <div>
+                <h3>Instagram</h3>
+                <p>Fotos, Alltag & Updates</p>
+              </div>
+            </a>
+
+            <a class="social-card" href="https://youtube.com/" target="_blank" rel="noreferrer">
+              <span class="social-icon">▶</span>
+              <div>
+                <h3>YouTube</h3>
+                <p>Content, Clips & Videos</p>
+              </div>
+            </a>
+
+            <a class="social-card" href="https://twitch.tv/" target="_blank" rel="noreferrer">
+              <span class="social-icon">◉</span>
+              <div>
+                <h3>Twitch</h3>
+                <p>Livestreams & Gaming</p>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <section id="cs" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Gaming</p>
+            <h2>Counter-Strike-Settings</h2>
+          </div>
+
+          <div class="card-grid two-col">
+            <article class="info-card">
+              <h3>Crosshair</h3>
+              <p>Wird später hier von mir manuell eingetragen.</p>
+            </article>
+
+            <article class="info-card">
+              <h3>Sensitivität</h3>
+              <p>Wird später hier von mir manuell eingetragen.</p>
+            </article>
+
+            <article class="info-card">
+              <h3>Video / Auflösung</h3>
+              <p>Wird später hier von mir manuell eingetragen.</p>
+            </article>
+
+            <article class="info-card">
+              <h3>Mouse / Setup</h3>
+              <p>Wird später hier von mir manuell eingetragen.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="projects" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Aktuell</p>
+            <h2>Projekte</h2>
+          </div>
+
+          <div class="project-box">
+            <h3>Coming Soon</h3>
+            <p>
+              Aktuell sind hier noch keine Projekte eingetragen. Ich baue sie Schritt für Schritt auf
+              und ergänze sie später direkt auf dieser Seite.
+            </p>
+          </div>
+        </section>
+
+        <section id="about" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Über mich</p>
+            <h2>Ein kleiner Blick auf mein Leben</h2>
+          </div>
+
+          <div class="about-card">
+            <p>
+              Ich bin SnoX und diese Seite ist mein digitaler Raum. Hier kommen meine Socials,
+              meine Gaming-Settings und meine aktuellen Ideen und Projekte zusammen. Ziel ist ein
+              einfacher, moderner Überblick über meinen Alltag, meine Interessen und was ich gerade
+              so am Start habe.
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>© <span id="year"></span> SnoX</p>
+      </footer>
     </div>
 
-    <!-- Automatisch die Anzahl der erstellten Nades aus den JSONs auslesen -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const mapCards = document.querySelectorAll('.map-card');
-
-            mapCards.forEach(async (card) => {
-                const jsonFile = card.getAttribute('data-json');
-                const countElement = card.querySelector('.map-count');
-
-                if (!jsonFile) return;
-
-                try {
-                    // Prevent Caching mit Timestamp ?v=...
-                    const response = await fetch(`${jsonFile}?v=${Date.now()}`);
-                    if (response.ok) {
-                        const nades = await response.json();
-                        const count = Array.isArray(nades) ? nades.length : 0;
-                        countElement.innerText = `${count} Lineup${count === 1 ? '' : 's'}`;
-                    } else {
-                        countElement.innerText = `0 Lineups`;
-                    }
-                } catch (err) {
-                    countElement.innerText = `0 Lineups`;
-                }
-            });
-        });
-    </script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
