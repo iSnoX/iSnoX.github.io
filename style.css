@@ -28,12 +28,30 @@ body {
   place-items: center;
 }
 
+.title-block {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 h1 {
   margin: 0;
   color: var(--accent);
   font-size: clamp(4rem, 14vw, 12rem);
   font-weight: 800;
   letter-spacing: 0.08em;
-  line-height: 1;
+  line-height: 0.9;
   text-transform: uppercase;
+}
+
+.coming-soon {
+  margin-top: 8px;
+  color: var(--text);
+  font-size: clamp(0.7rem, 1.8vw, 1.3rem);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: lowercase;
+  text-align: center;
+  width: 100%;
 }
